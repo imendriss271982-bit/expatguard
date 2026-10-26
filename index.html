@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>ExpatGuard</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one phone-width app column. Navy brand, skyline photo bands, white cards, bilingual EN/AR labels, fixed 4-tab bar. */
+:root {
+  --navy: #0A3355; --btn: #0A3355; --on-btn: #FFFFFF; --head: #0A3355;
+  --blue: #1774DD; --green: #068973; --amber: #D98A1A; --red: #E0313F; --purple: #A04FC9; --indigo: #5B60C2;
+  --bg: #F3F6F9; --surface: #FFFFFF; --fg: #13283D; --muted: #6B7C8F; --line: #E2E8EE; --soft: #EEF3F8;
+  --ok: #0B8A5F; --ok-bg: #DDF3EA; --warn-bg: #FCEFD9; --err-bg: #FCE3E5;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-ar: "Noto Sans Arabic", "Inter", system-ui, sans-serif;
+  --r: 16px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --btn: #1B5C96; --head: #CFE1F3; --bg: #08141F; --surface: #0F1F2E; --fg: #E6EEF6; --muted: #93A5B8; --line: #1F3348; --soft: #15293B;
+  --ok: #3CC48F; --ok-bg: rgba(60,196,143,.15); --warn-bg: rgba(217,138,26,.18); --err-bg: rgba(224,49,63,.18); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --btn: #1B5C96; --head: #CFE1F3; --bg: #08141F; --surface: #0F1F2E; --fg: #E6EEF6; --muted: #93A5B8; --line: #1F3348; --soft: #15293B;
+  --ok: #3CC48F; --ok-bg: rgba(60,196,143,.15); --warn-bg: rgba(217,138,26,.18); --err-bg: rgba(224,49,63,.18); color-scheme: dark }
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 15px; line-height: 1.45; }
+body.ar { font-family: var(--font-ar); }
+[lang="ar"] { font-family: var(--font-ar); }
+* { box-sizing: border-box; }
+svg { width: 22px; height: 22px; flex: none; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+.app { max-width: 480px; margin: 0 auto; min-height: 100%; background: var(--bg); padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
+.app.full { padding-bottom: 0; }
+.pad { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.row { display: flex; align-items: center; gap: 10px; }
+.grow { flex: 1; min-width: 0; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.num { font-variant-numeric: tabular-nums; }
+.center { text-align: center; }
+body.ar .flip { transform: scaleX(-1); }
+
+/* bilingual labels */
+.bi { display: flex; flex-direction: column; line-height: 1.25; }
+.bi .alt { font-size: .86em; font-weight: 500; color: var(--muted); }
+h1 .bi > span:first-child { font-size: 19px; font-weight: 700; color: var(--head); }
+h1 .bi .alt { font-size: 17px; font-weight: 600; color: var(--head); }
+.sl { opacity: .6; margin-inline: 2px; }
+.alt-i { font-weight: inherit; }
+
+/* brand */
+.shield { width: 44px; height: 50px; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--head); }
+.brand b { display: block; font-size: 22px; font-weight: 800; letter-spacing: -.3px; line-height: 1.1; }
+.brand span { display: block; font-size: 14px; font-weight: 500; }
+.brand.lg .shield { width: 64px; height: 74px; }
+.brand.lg b { font-size: 30px; }
+.brand.lg span { font-size: 17px; }
+
+/* buttons */
+.btn { min-height: 50px; border-radius: 12px; border: 0; padding: 0 18px; font-weight: 600; background: var(--btn); color: var(--on-btn); width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.btn.alt { background: var(--surface); color: var(--head); border: 1.5px solid var(--line); }
+.btn.ghost { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.9); border-radius: 99px; }
+.btn.social { background: var(--surface); color: var(--fg); border: 1.5px solid var(--line); font-weight: 500; font-size: 14px; }
+.btn.danger { background: transparent; color: var(--red); border: 1.5px solid var(--red); }
+.btn:disabled { opacity: .5; cursor: default; }
+.pillbtn { border: 0; border-radius: 99px; background: var(--btn); color: var(--on-btn); font-size: 13px; font-weight: 600; min-height: 34px; padding: 0 22px; display: block; margin: 10px auto 0; min-width: 62%; }
+.link { background: none; border: 0; color: var(--blue); font-weight: 600; padding: 6px 0; font-size: 13px; }
+.iconbtn { width: 44px; height: 44px; border-radius: 12px; border: 0; background: transparent; display: grid; place-items: center; color: var(--head); flex: none; }
+.fab { width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--btn); color: #fff; display: grid; place-items: center; flex: none; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+/* topbar */
+.topbar { display: flex; align-items: center; gap: 6px; padding-block: 14px 10px; position: sticky; top: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+
+/* cards */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; box-shadow: 0 1px 2px rgba(10,51,85,.04); }
+button.card { width: 100%; text-align: start; display: block; }
+.empty { text-align: center; padding: 22px 16px; align-items: center; }
+.empty svg { width: 36px; height: 36px; color: var(--muted); }
+
+/* home */
+.hhead { position: relative; color: #fff; overflow: hidden; padding-block: 18px 54px; min-height: 196px; }
+.hhead .sky, .welcome .sky { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hhead::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6,40,70,.72), rgba(6,40,70,.15) 70%, rgba(6,40,70,.25)); }
+.hhead > * { position: relative; z-index: 1; }
+.greet { font-size: 19px; font-weight: 600; line-height: 1.3; }
+.greet .alt { color: rgba(255,255,255,.88); font-size: 17px; font-weight: 500; }
+.hhead .iconbtn { color: #fff; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #0A3355; font-weight: 700; display: grid; place-items: center; border: 2px solid rgba(255,255,255,.8); flex: none; }
+.cpill { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: #0A3355; border: 0; border-radius: 99px; padding: 7px 14px 7px 8px; font-weight: 600; font-size: 14px; box-shadow: 0 4px 14px rgba(0,0,0,.15); }
+.cpill svg { width: 16px; height: 16px; }
+.sheet { position: relative; margin-top: -30px; background: var(--bg); border-radius: 24px 24px 0 0; padding-block: 18px; z-index: 2; }
+.fcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 14px 14px; }
+.fhead { display: flex; gap: 12px; align-items: flex-start; background: none; border: 0; padding: 0; width: 100%; text-align: start; }
+.fhead .bi > span:first-child { font-weight: 700; color: var(--head); font-size: 15px; }
+.fhead .bi .alt { color: var(--head); font-size: 14px; font-weight: 600; }
+.fdesc { display: block; margin-top: 4px; font-size: 12.5px; }
+.fdesc .bi > span:first-child, .fdesc .bi .alt { font-weight: 400; font-size: 12.5px; color: var(--muted); }
+.fdot { width: 52px; height: 52px; border-radius: 50%; background: var(--c); color: #fff; display: grid; place-items: center; flex: none; }
+.fdot svg { width: 26px; height: 26px; }
+.sect { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; font-size: 14px; font-weight: 700; color: var(--head); }
+.card.rem { display: flex; align-items: center; gap: 12px; }
+.sq { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; flex: none; color: var(--c); background: color-mix(in srgb, var(--c) 15%, transparent); }
+.sq svg { width: 22px; height: 22px; }
+
+/* pills */
+.pill { display: inline-block; padding: 3px 9px; border-radius: 99px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+.pill.ok { color: var(--ok); background: var(--ok-bg); }
+.pill.warn { color: var(--amber); background: var(--warn-bg); }
+.pill.err { color: var(--red); background: var(--err-bg); }
+.pill.mute { color: var(--muted); background: var(--soft); }
+.pill.solid-ok { background: var(--green); color: #fff; }
+.pill.solid-warn { background: var(--amber); color: #fff; }
+.banner { display: flex; gap: 10px; padding: 11px 13px; border-radius: 12px; font-size: 12.5px; background: var(--soft); color: var(--fg); }
+.banner svg { width: 18px; height: 18px; flex: none; margin-top: 1px; color: var(--blue); }
+
+/* flags */
+.flag { width: 36px; height: 36px; border-radius: 50%; overflow: hidden; display: inline-grid; flex: none; box-shadow: 0 0 0 1px var(--line); }
+.flag svg { width: 100%; height: 100%; }
+.flag.sm { width: 22px; height: 22px; }
+.flag.lg { width: 44px; height: 44px; }
+.plane { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--soft); color: var(--blue); flex: none; }
+
+/* segmented */
+.seg { display: flex; background: var(--soft); border-radius: 99px; padding: 4px; gap: 4px; }
+.seg button { flex: 1; min-height: 42px; border: 0; border-radius: 99px; background: transparent; font-weight: 600; font-size: 12.5px; color: var(--muted); line-height: 1.2; }
+.seg button.on { background: var(--btn); color: #fff; }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.chips button { flex: none; min-height: 40px; padding: 0 16px; border-radius: 99px; border: 0; background: var(--soft); color: var(--muted); font-size: 12px; font-weight: 600; line-height: 1.15; }
+.chips button.on { background: var(--btn); color: #fff; }
+.chips.wrap { flex-wrap: wrap; overflow: visible; }
+
+/* alerts */
+.acard { display: flex !important; gap: 12px; align-items: flex-start; }
+.acard .route { font-weight: 700; color: var(--head); font-size: 14.5px; }
+.acard .alt { color: var(--muted); font-size: 13px; display: block; }
+.meta { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12.5px; margin-top: 6px; }
+.meta svg { width: 15px; height: 15px; }
+.kv { font-size: 12.5px; color: var(--muted); }
+.kv b { color: var(--fg); }
+
+/* forms */
+.lbl { font-size: 13px; font-weight: 700; color: var(--head); margin-top: 4px; }
+.lbl .sl, .lbl .alt-i { font-weight: 500; color: var(--muted); }
+label.field { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 600; color: var(--muted); min-width: 0; }
+input, select { min-height: 50px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); padding: 0 14px; width: 100%; font-size: 15px; font-weight: 500; min-width: 0; }
+input[type="date"] { direction: ltr; }
+.inp { display: flex; align-items: center; gap: 10px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); padding: 0 14px; color: var(--muted); }
+.inp input { border: 0; padding: 0; background: transparent; min-height: 52px; }
+.inp input:focus { outline: none; }
+.inp:focus-within { border-color: var(--blue); }
+.selbox { position: relative; display: flex; align-items: center; }
+.selbox .flag { position: absolute; inset-inline-start: 10px; pointer-events: none; }
+.selbox .plane { position: absolute; inset-inline-start: 10px; pointer-events: none; width: 24px; height: 24px; }
+.selbox .plane svg { width: 14px; height: 14px; }
+.selbox select { padding-inline-start: 42px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stepper { display: flex; align-items: center; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); min-height: 50px; padding-inline: 14px 4px; }
+.stepper b { flex: 1; font-size: 15px; }
+.stepper button { width: 38px; height: 42px; border: 0; background: none; font-size: 20px; color: var(--head); }
+.sw { display: flex; align-items: center; gap: 12px; min-height: 48px; font-size: 13.5px; font-weight: 500; }
+.sw .tick { width: 22px; height: 22px; border-radius: 50%; background: var(--green); color: #fff; display: grid; place-items: center; flex: none; }
+.sw .tick svg { width: 14px; height: 14px; }
+.sw span.grow { min-width: 0; }
+.sw input { appearance: none; -webkit-appearance: none; width: 50px; height: 30px; min-height: 0; border-radius: 99px; background: var(--line); border: 0; padding: 0; position: relative; flex: none; transition: background .15s; }
+.sw input::after { content: ""; position: absolute; top: 3px; inset-inline-start: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .15s; }
+.sw input:checked { background: var(--btn); }
+.sw input:checked::after { transform: translateX(20px); }
+body.ar .sw input:checked::after { transform: translateX(-20px); }
+.err-text { color: var(--red); font-size: 13px; }
+
+/* documents */
+.dcard { display: flex !important; gap: 14px; align-items: center; }
+.dicon { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; flex: none; color: var(--c); background: color-mix(in srgb, var(--c) 15%, transparent); }
+.dicon svg { width: 26px; height: 26px; }
+.dcard h3 { font-size: 15px; color: var(--head); }
+.dcard .sub { font-size: 12.5px; color: var(--muted); }
+.date-red { color: var(--red); }
+
+/* gratuity */
+.steps { display: flex; align-items: flex-start; position: relative; margin-block: 6px 8px; }
+.steps::before { content: ""; position: absolute; top: 17px; inset-inline: 16%; height: 2px; background: var(--line); }
+.steps div { flex: 1; text-align: center; font-size: 12px; color: var(--muted); position: relative; line-height: 1.25; }
+.steps b { display: grid; place-items: center; width: 34px; height: 34px; margin: 0 auto 6px; border-radius: 50%; background: var(--surface); border: 1.5px solid var(--line); color: var(--muted); font-size: 13px; }
+.steps .on b { background: var(--btn); border-color: var(--btn); color: #fff; }
+.steps .on { color: var(--head); font-weight: 600; }
+.ccard { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 12px; min-height: 64px; text-align: start; font-size: 13px; }
+.ccard.on { border: 2px solid var(--btn); }
+.ccard .bi > span:first-child { font-weight: 600; }
+.result { background: var(--navy); color: #fff; border: 0; text-align: center; }
+.result .muted { color: rgba(255,255,255,.75); }
+.bigamount { font-size: 30px; font-weight: 800; }
+.band { position: relative; height: 130px; overflow: hidden; border-radius: 0 0 16px 16px; margin-top: 8px; }
+.band .sky { width: 100%; height: 100%; }
+.band::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, var(--bg), transparent 60%); z-index: 1; }
+.bar { height: 8px; background: var(--line); border-radius: 8px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--green); }
+.check { display: flex; gap: 12px; align-items: flex-start; }
+.check input { width: 24px; height: 24px; min-height: 0; margin-top: 2px; accent-color: var(--green); flex: none; }
+.confirm { border-color: var(--red); }
+
+/* profile */
+.pcard { display: flex; align-items: center; gap: 14px; }
+.bigav { width: 76px; height: 76px; border-radius: 50%; background: var(--btn); color: #fff; font-size: 28px; font-weight: 700; display: grid; place-items: center; flex: none; }
+.plan { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; background: var(--warn-bg); color: var(--amber); font-size: 12px; font-weight: 700; margin-top: 6px; }
+.plan svg { width: 14px; height: 14px; }
+.menu { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.menu button { display: flex; align-items: center; gap: 14px; width: 100%; padding: 13px 14px; border: 0; background: none; text-align: start; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+.menu button:last-child { border-bottom: 0; }
+.menu svg { color: var(--muted); }
+.menu .val { font-size: 13px; color: var(--fg); }
+.menu.danger button, .menu.danger svg { color: var(--red); }
+
+/* welcome + pre-app */
+.app.full { height: 100%; }
+.welcome { position: relative; min-height: 100%; color: #fff; overflow: hidden; display: flex; flex-direction: column; }
+.welcome::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6,40,70,.55) 0%, rgba(6,40,70,.05) 38%, rgba(6,40,70,.1) 55%, rgba(6,40,70,.85) 100%); }
+.welcome > *:not(.sky) { position: relative; z-index: 1; }
+.welcome .brand { color: #fff; }
+.wtop { display: flex; justify-content: flex-end; padding-block: 16px 0; }
+.langsw { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; }
+.langsw button { background: none; border: 0; padding: 6px 4px; color: inherit; opacity: .7; font-weight: 600; }
+.langsw button.on { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+.langsw.boxed { border: 1.5px solid var(--line); border-radius: 99px; padding: 2px 12px; color: var(--head); }
+.wbrand { padding-block: 34px 0; display: flex; flex-direction: column; gap: 22px; align-items: center; text-align: center; }
+.wtag { font-size: 19px; font-weight: 500; line-height: 1.45; }
+.wbottom { margin-top: auto; padding-block: 0 26px; display: flex; flex-direction: column; gap: 14px; }
+.dots { display: flex; gap: 6px; justify-content: center; margin-top: 6px; }
+.dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.5); }
+.dots i.on { background: #fff; }
+.pre { padding-block: 12px 28px; display: flex; flex-direction: column; gap: 14px; min-height: 100%; }
+.pre h2 .bi > span:first-child { font-size: 22px; font-weight: 700; color: var(--head); }
+.pre h2 .bi .alt { font-size: 20px; color: var(--head); font-weight: 600; }
+.or { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; }
+.or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.gmark { font-weight: 800; font-size: 17px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* tabs */
+.tabs { position: fixed; inset: auto 0 0 0; background: var(--surface); border-top: 1px solid var(--line); z-index: 10; padding-bottom: env(safe-area-inset-bottom, 0px); }
+.tabs .in { max-width: 480px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); padding-left: max(8px, env(safe-area-inset-left, 0px)); padding-right: max(8px, env(safe-area-inset-right, 0px)); }
+.tab { border: 0; background: none; padding: 8px 0 8px; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; color: var(--muted); line-height: 1.2; }
+.tab .alt2 { font-size: 10px; }
+.tab svg { width: 23px; height: 23px; margin-bottom: 2px; }
+.tab.on { color: var(--head); font-weight: 700; }
+.tab.on svg { fill: currentColor; fill-opacity: .15; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(100px + env(safe-area-inset-bottom, 0px)); background: #0A3355; color: #fff; padding: 12px 18px; border-radius: 12px; z-index: 20; font-size: 14px; max-width: calc(100% - 32px); }
+@media (prefers-reduced-motion: no-preference) { .screen { animation: in .18s ease-out; } @keyframes in { from { opacity: .5; transform: translateY(4px); } } }
+</style>
+
+</head><body>
+<div class="app" id="app"></div>
+<nav class="tabs" id="tabs" aria-label="Main"></nav>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+// ExpatGuard gratuity engine (same rules and arithmetic as supabase/functions/_shared/gratuity.ts).
+const RULES = {
+  AE: { status: 'in_review', ref: 'Federal Decree-Law 33/2021, art. 51', src: 'https://uaelegislation.gov.ae/en/legislations/1541/download', eff: '2022-02-02',
+        p: { base: 'basic', basis: 30, min: 1, pro: 'days', tiers: [[5, 21], [null, 30]], cap: 24, resign: null } },
+  BH: { status: 'in_review', ref: 'Law 36/2012, art. 116', src: 'https://www.lmra.gov.bh/files/cms/shared/file/labour%20law.pdf', eff: null,
+        p: { base: 'basic_social', basis: 30, min: 0, pro: 'months', tiers: [[3, 15], [null, 30]], cap: null, resign: null, sio: '2024-03-01' } },
+  QA: { status: 'in_review', ref: 'Law 14/2004, art. 54', src: 'https://www.clydeco.com/en/insights/2023/01/a-quick-guide-to-staff-demobilisation-in-qatar', eff: null,
+        p: { base: 'basic', basis: 30, min: 1, pro: 'days', tiers: [[null, 21]], cap: null, resign: null } },
+  SA: { status: 'in_review', ref: 'Saudi Labour Law', src: 'https://www.hrsd.gov.sa/en/knowledge-centre/articles/317-0', eff: null,
+        p: { base: 'last', basis: 30, min: 0, pro: 'days', tiers: [[5, 15], [null, 30]], cap: null,
+             resign: [[0, 2, '0'], [2, 5, '1/3'], [5, 10, '2/3'], [10, null, null]] } },
+  KW: { status: 'in_review', ref: 'Law 6/2010, arts. 51 and 53', src: 'https://ineqad.com/en/articles/end-of-service-benefits-kuwait-calculation', eff: null,
+        p: { base: 'basic', basis: 30, min: 0, pro: 'days', tiers: [[5, 15], [null, 30]], cap: 18,
+             resign: [[0, 3, '0'], [3, 5, '1/2'], [5, 10, '2/3'], [10, null, '1']] } },
+  OM: { status: 'unavailable', ref: 'Royal Decree 53/2023', src: 'https://amcham.om/wp-content/uploads/2025/02/OMAN-LABOUR-LAW-532023.pdf', eff: null, p: null },
+};
+const EXP = { QAR: 2, AED: 2, SAR: 2, KWD: 3, BHD: 3, OMR: 3 };
+
+const gcd = (a, b) => { a = a < 0n ? -a : a; b = b < 0n ? -b : b; while (b) [a, b] = [b, a % b]; return a || 1n; };
+const Q = (n, d = 1n) => { n = BigInt(n); d = BigInt(d); if (d < 0n) { n = -n; d = -d; } const g = gcd(n, d); return { n: n / g, d: d / g }; };
+const qadd = (a, b) => Q(a.n * b.d + b.n * a.d, a.d * b.d);
+const qsub = (a, b) => Q(a.n * b.d - b.n * a.d, a.d * b.d);
+const qmul = (a, b) => Q(a.n * b.n, a.d * b.d);
+const qdiv = (a, b) => Q(a.n * b.d, a.d * b.n);
+const qcmp = (a, b) => { const l = a.n * b.d, r = b.n * a.d; return l < r ? -1 : l > r ? 1 : 0; };
+const qmin = (a, b) => (qcmp(a, b) <= 0 ? a : b);
+const qmax = (a, b) => (qcmp(a, b) >= 0 ? a : b);
+const parseFrac = (s) => s.includes('/') ? Q(BigInt(s.split('/')[0]), BigInt(s.split('/')[1])) : Q(BigInt(s));
+const round = (x) => { const neg = x.n < 0n; const n = neg ? -x.n : x.n; const r = (2n * n + x.d) / (2n * x.d); return neg ? -r : r; };
+const fmt2 = (x) => { const s = round(qmul(x, Q(100))).toString().padStart(3, '0'); return s.slice(0, -2) + '.' + s.slice(-2); };
+
+function toMinor(str, cur) {
+  const e = EXP[cur]; const s = String(str).trim().replace(/,/g, '');
+  if (!/^\d{1,12}(\.\d+)?$/.test(s)) return null;
+  const [i, f = ''] = s.split('.'); if (f.length > e) return null;
+  return BigInt(i) * 10n ** BigInt(e) + BigInt((f.padEnd(e, '0')) || '0');
+}
+function formatMinor(m, cur) {
+  m = BigInt(m); const e = EXP[cur] ?? 2; const base = 10n ** BigInt(e);
+  const whole = (m / base).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return '⁦' + whole + (e ? '.' + (m % base).toString().padStart(e, '0') : '') + ' ' + cur + '⁩';
+}
+function parseDate(s) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) throw new Error('invalid_date');
+  const t = Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10));
+  if (new Date(t).toISOString().slice(0, 10) !== s) throw new Error('invalid_date');
+  return t;
+}
+function completedMonths(a, b) {
+  const [sy, sm, sd] = a.split('-').map(Number), [ey, em, ed] = b.split('-').map(Number);
+  let m = (ey - sy) * 12 + (em - sm); if (ed < sd) m--; return Math.max(0, m);
+}
+
+/** Returns {available:false, reason} or a full result with breakdown steps [key, params]. */
+function calculateGratuity(country, start, end, wageMinor, socialMinor, reason) {
+  const rule = RULES[country];
+  if (!rule || rule.status !== 'in_review' && rule.status !== 'verified') return { available: false, reason: 'rule_unavailable' };
+  const p = rule.p; const cur = { QA: 'QAR', AE: 'AED', SA: 'SAR', KW: 'KWD', BH: 'BHD', OM: 'OMR' }[country];
+  const s = parseDate(start), e = parseDate(end);
+  if (e <= s) throw new Error('end_before_start');
+  if (wageMinor <= 0n) throw new Error('wage_must_be_positive');
+  const days = Math.round((e - s) / 86400000);
+  const years = p.pro === 'months' ? Q(completedMonths(start, end), 12) : Q(days, 365);
+  const steps = [['service', { days, years: fmt2(years) }]];
+  const warnings = [];
+  if (rule.eff && start < rule.eff) warnings.push('before_rule');
+  if (p.sio && end >= p.sio) warnings.push('sio');
+  const monthly = Q(wageMinor + (p.base === 'basic_social' ? (socialMinor ?? 0n) : 0n));
+  const daily = qdiv(monthly, Q(p.basis));
+  steps.push(['daily', { monthly: formatMinor(monthly.n, cur), basis: p.basis, daily: formatMinor(round(daily), cur) }]);
+  const base = { available: true, confirmed: rule.status === 'verified', currency: cur, days, years: fmt2(years), warnings, ref: rule.ref, src: rule.src };
+  if (qcmp(years, Q(p.min)) < 0) {
+    steps.push(['below', { min: p.min }]);
+    return { ...base, eligible: false, amount: 0n, steps };
+  }
+  let total = Q(0), prev = Q(0);
+  for (const [upTo, perYear] of p.tiers) {
+    const upper = upTo === null ? years : qmin(years, Q(upTo));
+    const span = qmax(Q(0), qsub(upper, prev));
+    if (qcmp(span, Q(0)) > 0) {
+      const td = qmul(span, Q(perYear)); total = qadd(total, td);
+      steps.push(['tier', { years: fmt2(span), perYear, days: fmt2(td) }]);
+    }
+    if (upTo === null) break;
+    prev = Q(upTo); if (qcmp(years, prev) <= 0) break;
+  }
+  let amount = qmul(daily, total);
+  if (reason === 'resignation' && p.resign) {
+    const b = p.resign.find(([from, to]) => qcmp(years, Q(from)) >= 0 && (to === null || qcmp(years, Q(to)) < 0));
+    if (!b || b[2] === null) return { available: false, reason: 'resignation_unconfirmed' };
+    amount = qmul(amount, parseFrac(b[2]));
+    steps.push(['resign', { fraction: b[2] }]);
+  }
+  if (p.cap !== null) {
+    const cap = qmul(monthly, Q(p.cap));
+    if (qcmp(amount, cap) > 0) { amount = cap; steps.push(['cap', { months: p.cap }]); }
+  }
+  const amountMinor = round(amount);
+  steps.push(['total', { amount: formatMinor(amountMinor, cur) }]);
+  return { ...base, eligible: true, amount: amountMinor, steps };
+}
+
+
+</script>
+<script>
+const T = {
+en: {
+  dir: 'ltr', appName: 'ExpatGuard', tagline: 'Travel smarter. Stay prepared. Save more.',
+  welcome: 'Your Gulf expat companion: cheaper flights home, document reminders, gratuity estimates and a guide for your first weeks.',
+  getStarted: 'Get started', next: 'Next', back: 'Back', skip: 'Skip', chooseLang: 'Choose your language', whereLive: 'Where do you live?',
+  homeQ: 'Your home country (optional)', homeWhy: 'Used only to suggest flights home. You can change it later.', homeLabel: 'Home country',
+  featuresTitle: 'What ExpatGuard does', fFlights: 'Flight price alerts', fFlightsT: 'Get told when a fare home fits your budget.',
+  fDocs: 'Document reminders', fDocsT: 'Never miss an ID, passport or licence renewal.', fGrat: 'Gratuity calculator', fGratT: 'Estimate your end-of-service benefit by country.',
+  fGuide: 'Arrival guide', fGuideT: 'Which office, which steps, which documents.', readyT: "You're all set", readyS: 'This web preview keeps your data on this device only.',
+  start: 'Open ExpatGuard',
+  tabHome: 'Home', tabFlights: 'Flights', tabDocs: 'Documents', tabProfile: 'Profile',
+  morning: 'Good morning', afternoon: 'Good afternoon', evening: 'Good evening',
+  findCheaper: 'Find cheaper flights home', findCheaperT: 'Set your route and budget. You are told when a matching fare appears.', createAlert: 'Create flight alert',
+  activeAlerts: 'Active alerts', upcoming: 'Upcoming expiries', viewAll: 'View all',
+  docsTitle: 'My documents', docAdd: 'Add document', docEdit: 'Edit document', docEmpty: 'No documents yet', docEmptyT: 'Add your ID, passport or licence expiry date to see it here.',
+  gExpired: 'Expired', gSoon: 'Expiring soon', gValid: 'Valid', today: 'Expires today', left1: '1 day left', leftN: '{n} days left', nextExp: 'Next expiry: {name} on {date}',
+  docType: 'Document type', docName: 'Name shown in the app', expiry: 'Expiry date', remind: 'Remind me', before: '{n} days before', before1: '1 day before', notes: 'Notes (optional)',
+  docPrivacy: 'Only the expiry date is needed. Never enter ID numbers.', save: 'Save', saved: 'Saved', del: 'Delete', cancel: 'Cancel', confirmDel: 'Delete for good?', yesDel: 'Yes, delete',
+  types: { qatar_id: 'Qatar ID', emirates_id: 'Emirates ID', saudi_iqama: 'Saudi Iqama', passport: 'Passport', driving_licence: 'Driving licence', residence_permit: 'Residence permit', rental_contract: 'Rental contract', insurance: 'Insurance', custom: 'Other document' },
+  errName: 'Enter a name.', errExpiry: 'Choose the expiry date.',
+  flightsTitle: 'Flight alerts', monitorOff: 'Price monitoring is not connected yet. Your alerts are saved, and no prices are shown until a licensed flight data provider is active.',
+  aActive: 'Active', aPaused: 'Paused', aExpired: 'Expired', flEmpty: 'No alerts here', flEmptyT: 'Create an alert for your route and budget.',
+  from: 'From', to: 'To', round: 'Round trip', oneway: 'One way', depart: 'Departure date', ret: 'Return date', flex: 'Date flexibility', exact: 'Exact dates', flexN: '± {n} days',
+  adults: 'Adults', children: 'Children', cabin: 'Travel class', cabins: { economy: 'Economy', premium_economy: 'Premium economy', business: 'Business', first: 'First' },
+  maxPrice: 'Maximum total price', direct: 'Direct flights only', notifyBudget: 'Notify me when a fare fits my budget', notifyDrop: 'Also notify me about big price drops',
+  review: 'Review alert', summary: 'Alert summary', activate: 'Activate price alert', honesty: 'Prices change often. You are told when a fare matches; a price drop is never promised.',
+  budget: 'Max: {p}', notChecked: 'Not checked yet: monitoring not connected', pause: 'Pause', resume: 'Resume', alertCreated: 'Alert created',
+  eOrigin: 'Choose a departure airport.', eDest: 'Choose a destination airport.', eSame: 'Departure and destination must be different.', eDepart: 'Choose a departure date in the future.',
+  eReturn: 'Choose a return date after departure.', ePrice: 'Enter a maximum price above zero.', pax: '{a} adult(s), {c} child(ren)',
+  gratTitle: 'End-of-service calculator', sCountry: 'Country', sJob: 'Employment', sResult: 'Results', selCountry: 'Select the country of employment',
+  startD: 'Start date', endD: 'End or departure date', basic: 'Basic monthly salary', last: 'Last monthly wage', social: 'Social allowance',
+  salaryNote: 'Used only for this calculation and never stored.', reason: 'Reason for leaving', rTerm: 'Terminated by employer', rEnd: 'End of contract', rResign: 'Resignation',
+  calc: 'Calculate', toConfirm: 'Estimate to be confirmed: this country rule has not yet been checked against the official text by a qualified person.',
+  estimated: 'Estimated gratuity', notElig: 'Not eligible yet', service: 'Service: {y} years ({d} days)', how: 'How it was calculated', legal: 'Legal basis', source: 'View source',
+  disclaimer: 'This is an estimate, not legal advice and not guaranteed. Your contract, employer scheme or a court may give a different amount.',
+  unavailT: 'No estimate available', unavailM: 'The rule for this country is still under legal review. Showing nothing is better than a wrong number.',
+  resignU: 'The resignation rate for this length of service could not be confirmed, so no estimate is given.',
+  eDates: 'Enter valid start and end dates, with the end after the start.', eWage: 'Enter a valid salary amount.', edit: 'Edit',
+  wBefore: 'Part of your service is before this rule took effect; older rules may apply to that period.', wSio: 'For recent service, gratuity may be paid through social insurance contributions rather than by the employer.',
+  st: { service: 'Service of {days} days = {years} years', daily: 'Daily wage: {monthly} ÷ {basis} = {daily}', tier: '{years} years × {perYear} days = {days} days of wage',
+        resign: 'Resignation: {fraction} of the amount', cap: 'Capped at {months} months of wage', below: 'Minimum service of {min} year not reached', total: 'Estimated total: {amount}' },
+  guideTitle: 'New-arrival guide', guideIntro: 'Choose a country to see the five steps every new resident goes through.',
+  guideSteps: ['Work permit or contract registration', 'Medical examination', 'Residence permit and national ID', 'Driving licence (issue or exchange)', 'Health card or insurance'],
+  guideVerify: 'Offices, phone numbers and document lists are being checked against official sources. They appear here only once verified.', progress: '{d} of {t} steps done',
+  notifTitle: 'Notifications', notifEmpty: 'No notifications yet', notifEmptyT: 'Document reminders and flight deals will appear here once the online service is connected.',
+  profile: 'My profile', guest: 'Guest', guestHint: 'Web preview. Your data stays on this device.', settings: 'Settings', language: 'Language', residence: 'Country of residence',
+  homeCountry: 'Home country', notSet: 'Not set', privacy: 'Privacy', privacyT: 'No ID numbers, no scans, no salary stored. Documents and alerts are saved only in this browser.',
+  about: 'About ExpatGuard', aboutT: 'An independent app. Not a government service, law firm, airline or travel agency.', reset: 'Erase all my data', resetDone: 'All data erased',
+  countries: { QA: 'Qatar', AE: 'United Arab Emirates', SA: 'Saudi Arabia', KW: 'Kuwait', BH: 'Bahrain', OM: 'Oman' },
+  hcountries: { TN: 'Tunisia', MA: 'Morocco', DZ: 'Algeria', EG: 'Egypt', LB: 'Lebanon', JO: 'Jordan', IN: 'India', PK: 'Pakistan', PH: 'Philippines', LK: 'Sri Lanka', NP: 'Nepal', BD: 'Bangladesh', KE: 'Kenya', TR: 'Türkiye', GB: 'United Kingdom', FR: 'France' },
+},
+ar: {
+  dir: 'rtl', appName: 'إكسبات جارد', tagline: 'سافر بذكاء. كن مستعدًا. وفّر أكثر.',
+  welcome: 'رفيقك كمقيم في الخليج: رحلات أرخص إلى الوطن، تذكيرات بالوثائق، تقدير مكافأة نهاية الخدمة، ودليل لأسابيعك الأولى.',
+  getStarted: 'ابدأ', next: 'التالي', back: 'رجوع', skip: 'تخطي', chooseLang: 'اختر لغتك', whereLive: 'أين تقيم؟',
+  homeQ: 'بلدك الأصلي (اختياري)', homeWhy: 'يُستخدم فقط لاقتراح رحلات إلى بلدك. يمكنك تغييره لاحقًا.', homeLabel: 'البلد الأصلي',
+  featuresTitle: 'ما الذي يقدمه إكسبات جارد', fFlights: 'تنبيهات أسعار الرحلات', fFlightsT: 'نُعلمك عندما يناسب سعر الرحلة ميزانيتك.',
+  fDocs: 'تذكيرات الوثائق', fDocsT: 'لا تفوّت تجديد البطاقة أو الجواز أو الرخصة.', fGrat: 'حاسبة مكافأة نهاية الخدمة', fGratT: 'قدّر مكافأة نهاية الخدمة حسب الدولة.',
+  fGuide: 'دليل الوصول', fGuideT: 'أي مكتب، أي خطوات، أي وثائق.', readyT: 'كل شيء جاهز', readyS: 'هذه النسخة التجريبية على الويب تحفظ بياناتك على هذا الجهاز فقط.',
+  start: 'افتح إكسبات جارد',
+  tabHome: 'الرئيسية', tabFlights: 'الرحلات', tabDocs: 'الوثائق', tabProfile: 'الملف الشخصي',
+  morning: 'صباح الخير', afternoon: 'مساء الخير', evening: 'مساء الخير',
+  findCheaper: 'ابحث عن رحلات أرخص إلى الوطن', findCheaperT: 'حدد مسارك وميزانيتك. سنخبرك عند ظهور سعر مناسب.', createAlert: 'إنشاء تنبيه رحلة',
+  activeAlerts: 'التنبيهات النشطة', upcoming: 'انتهاءات قادمة', viewAll: 'عرض الكل',
+  docsTitle: 'وثائقي', docAdd: 'إضافة وثيقة', docEdit: 'تعديل الوثيقة', docEmpty: 'لا توجد وثائق بعد', docEmptyT: 'أضف تاريخ انتهاء بطاقتك أو جوازك أو رخصتك ليظهر هنا.',
+  gExpired: 'منتهية', gSoon: 'تنتهي قريبًا', gValid: 'سارية', today: 'تنتهي اليوم', left1: 'يوم واحد متبقٍ', leftN: '{n} يومًا متبقيًا', nextExp: 'الانتهاء التالي: {name} في {date}',
+  docType: 'نوع الوثيقة', docName: 'الاسم الظاهر في التطبيق', expiry: 'تاريخ الانتهاء', remind: 'ذكّرني', before: 'قبل {n} يومًا', before1: 'قبل يوم', notes: 'ملاحظات (اختياري)',
+  docPrivacy: 'نحتاج فقط إلى تاريخ الانتهاء. لا تُدخل أرقام الهوية.', save: 'حفظ', saved: 'تم الحفظ', del: 'حذف', cancel: 'إلغاء', confirmDel: 'حذف نهائيًا؟', yesDel: 'نعم، احذف',
+  types: { qatar_id: 'البطاقة الشخصية القطرية', emirates_id: 'الهوية الإماراتية', saudi_iqama: 'الإقامة السعودية', passport: 'جواز السفر', driving_licence: 'رخصة القيادة', residence_permit: 'تصريح الإقامة', rental_contract: 'عقد الإيجار', insurance: 'التأمين', custom: 'وثيقة أخرى' },
+  errName: 'أدخل اسمًا.', errExpiry: 'اختر تاريخ الانتهاء.',
+  flightsTitle: 'تنبيهات الرحلات', monitorOff: 'مراقبة الأسعار غير متصلة بعد. تنبيهاتك محفوظة، ولن تظهر أي أسعار حتى يتم تفعيل مزود بيانات رحلات مرخّص.',
+  aActive: 'نشط', aPaused: 'متوقف', aExpired: 'منتهٍ', flEmpty: 'لا توجد تنبيهات هنا', flEmptyT: 'أنشئ تنبيهًا لمسارك وميزانيتك.',
+  from: 'من', to: 'إلى', round: 'ذهاب وعودة', oneway: 'ذهاب فقط', depart: 'تاريخ المغادرة', ret: 'تاريخ العودة', flex: 'مرونة التواريخ', exact: 'تواريخ محددة', flexN: '± {n} أيام',
+  adults: 'البالغون', children: 'الأطفال', cabin: 'درجة السفر', cabins: { economy: 'الاقتصادية', premium_economy: 'الاقتصادية الممتازة', business: 'رجال الأعمال', first: 'الأولى' },
+  maxPrice: 'الحد الأقصى للسعر الإجمالي', direct: 'رحلات مباشرة فقط', notifyBudget: 'أعلمني عندما يناسب السعر ميزانيتي', notifyDrop: 'أعلمني أيضًا بالانخفاضات الكبيرة',
+  review: 'مراجعة التنبيه', summary: 'ملخص التنبيه', activate: 'تفعيل تنبيه السعر', honesty: 'الأسعار تتغير باستمرار. نُعلمك عندما يتطابق سعر، ولا نعد أبدًا بانخفاض السعر.',
+  budget: 'الحد الأقصى: {p}', notChecked: 'لم يُفحص بعد: المراقبة غير متصلة', pause: 'إيقاف مؤقت', resume: 'استئناف', alertCreated: 'تم إنشاء التنبيه',
+  eOrigin: 'اختر مطار المغادرة.', eDest: 'اختر مطار الوصول.', eSame: 'يجب أن يختلف مطار المغادرة عن مطار الوصول.', eDepart: 'اختر تاريخ مغادرة في المستقبل.',
+  eReturn: 'اختر تاريخ عودة بعد المغادرة.', ePrice: 'أدخل سعرًا أقصى أكبر من صفر.', pax: 'بالغون: {a}، أطفال: {c}',
+  gratTitle: 'حاسبة مكافأة نهاية الخدمة', sCountry: 'الدولة', sJob: 'العمل', sResult: 'النتيجة', selCountry: 'اختر دولة العمل',
+  startD: 'تاريخ البدء', endD: 'تاريخ الانتهاء أو المغادرة', basic: 'الراتب الأساسي الشهري', last: 'آخر أجر شهري', social: 'العلاوة الاجتماعية',
+  salaryNote: 'يُستخدم لهذا الحساب فقط ولا يُحفظ أبدًا.', reason: 'سبب انتهاء العمل', rTerm: 'إنهاء من صاحب العمل', rEnd: 'انتهاء العقد', rResign: 'استقالة',
+  calc: 'احسب', toConfirm: 'تقدير بحاجة إلى تأكيد: لم يتم التحقق بعد من قاعدة هذه الدولة مقابل النص الرسمي من قبل مختص.',
+  estimated: 'المكافأة التقديرية', notElig: 'غير مستحق بعد', service: 'مدة الخدمة: {y} سنة ({d} يومًا)', how: 'طريقة الحساب', legal: 'الأساس القانوني', source: 'عرض المصدر',
+  disclaimer: 'هذا تقدير وليس استشارة قانونية ولا مضمونًا. قد يختلف المبلغ بحسب عقدك أو نظام صاحب العمل أو المحكمة.',
+  unavailT: 'لا يوجد تقدير متاح', unavailM: 'قاعدة هذه الدولة لا تزال قيد المراجعة القانونية. عدم عرض رقم أفضل من عرض رقم خاطئ.',
+  resignU: 'تعذر تأكيد نسبة الاستقالة لهذه المدة، لذلك لا يُعرض تقدير.',
+  eDates: 'أدخل تاريخي بدء وانتهاء صحيحين، على أن يكون الانتهاء بعد البدء.', eWage: 'أدخل مبلغ راتب صحيحًا.', edit: 'تعديل',
+  wBefore: 'جزء من خدمتك قبل سريان هذه القاعدة؛ قد تنطبق قواعد أقدم على تلك الفترة.', wSio: 'بالنسبة للخدمة الحديثة، قد تُدفع المكافأة عبر اشتراكات التأمين الاجتماعي وليس من صاحب العمل.',
+  st: { service: 'خدمة {days} يومًا = {years} سنة', daily: 'الأجر اليومي: {monthly} ÷ {basis} = {daily}', tier: '{years} سنة × {perYear} يومًا = {days} يوم أجر',
+        resign: 'الاستقالة: {fraction} من المبلغ', cap: 'بحد أقصى أجر {months} شهرًا', below: 'لم تُستوفَ مدة الخدمة الدنيا ({min} سنة)', total: 'الإجمالي التقديري: {amount}' },
+  guideTitle: 'دليل القادمين الجدد', guideIntro: 'اختر دولة لعرض الخطوات الخمس التي يمر بها كل مقيم جديد.',
+  guideSteps: ['تصريح العمل أو تسجيل العقد', 'الفحص الطبي', 'تصريح الإقامة والبطاقة الوطنية', 'رخصة القيادة (إصدار أو استبدال)', 'البطاقة الصحية أو التأمين'],
+  guideVerify: 'يجري التحقق من المكاتب وأرقام الهواتف وقوائم الوثائق من المصادر الرسمية. تظهر هنا فقط بعد التحقق منها.', progress: 'أُنجزت {d} من {t} خطوات',
+  notifTitle: 'الإشعارات', notifEmpty: 'لا توجد إشعارات بعد', notifEmptyT: 'ستظهر هنا تذكيرات الوثائق وعروض الرحلات بعد ربط الخدمة عبر الإنترنت.',
+  profile: 'ملفي الشخصي', guest: 'ضيف', guestHint: 'نسخة تجريبية على الويب. بياناتك تبقى على هذا الجهاز.', settings: 'الإعدادات', language: 'اللغة', residence: 'دولة الإقامة',
+  homeCountry: 'البلد الأصلي', notSet: 'غير محدد', privacy: 'الخصوصية', privacyT: 'لا أرقام هوية، لا صور، لا رواتب محفوظة. الوثائق والتنبيهات محفوظة في هذا المتصفح فقط.',
+  about: 'حول إكسبات جارد', aboutT: 'تطبيق مستقل. ليس خدمة حكومية ولا مكتب محاماة ولا شركة طيران ولا وكالة سفر.', reset: 'مسح كل بياناتي', resetDone: 'تم مسح كل البيانات',
+  countries: { QA: 'قطر', AE: 'الإمارات', SA: 'السعودية', KW: 'الكويت', BH: 'البحرين', OM: 'عُمان' },
+  hcountries: { TN: 'تونس', MA: 'المغرب', DZ: 'الجزائر', EG: 'مصر', LB: 'لبنان', JO: 'الأردن', IN: 'الهند', PK: 'باكستان', PH: 'الفلبين', LK: 'سريلانكا', NP: 'نيبال', BD: 'بنغلاديش', KE: 'كينيا', TR: 'تركيا', GB: 'المملكة المتحدة', FR: 'فرنسا' },
+} };
+
+const EXTRA = {
+en: {
+  tagline2: 'Your life in the Gulf, simplified.', getStarted: 'Get Started', logIn: 'Log In', welcomeBack: 'Welcome Back', loginSub: 'Log in to your account',
+  email: 'Email', password: 'Password', forgot: 'Forgot password?', or: 'or', google: 'Continue with Google', apple: 'Continue with Apple',
+  noAccount: "Don't have an account?", signUp: 'Sign Up', continueGuest: 'Continue as guest',
+  acctSoon: 'Online accounts are coming soon. For now, continue as a guest: your data stays on this device.',
+  setupT: 'Set up your profile', yourName: 'Your first name', whereLive: 'Where do you live?', start: 'Start',
+  flightsCard: 'Flight Alerts', flightsCardT: 'Get notified when flight prices drop.', createAlertShort: 'Create Alert',
+  docsCard: 'My Documents', docsCardT: 'Track expiry dates and get reminders.', viewDocs: 'View Documents',
+  gratCard: 'End of Service Gratuity', gratCardT: 'Calculate your estimated gratuity.', calcNow: 'Calculate Now',
+  guideCard: 'Arrival Guide', guideCardT: 'The five steps every new resident goes through.', openGuide: 'Open Guide',
+  nextRem: 'Next Reminders', inDays: 'in {n} days', daysN: '{n} days', noRem: 'No reminders yet. Add a document to see its expiry here.',
+  myAlerts: 'My Alerts', popular: 'Popular Destinations', maxL: 'Max', lastPrice: 'Last price', notYet: 'not checked yet',
+  popularT: 'Common routes from your city. Tap one to set a price alert.',
+  tripDetails: 'Trip Details', tripType: 'Trip Type', round: 'Round Trip', oneway: 'One Way', depart: 'Departure Date', ret: 'Return Date',
+  passengers: 'Passengers', cabin: 'Travel Class', maxPrice: 'Max Price', direct: 'Direct Flights Only', flexDates: 'Flexible Dates',
+  createAlert: 'Create Flight Alert', createBtn: 'Create Alert', all: 'All', docsTitle: 'My Documents', flightsTitle: 'Flight Alerts',
+  gratTitle: 'End of Service Gratuity', sCountry: 'Country', sJob: 'Employment', sResult: 'Results', selCountry: 'Select Country',
+  profile: 'My Profile', personal: 'Personal Information', countryCur: 'Country & Currency', language: 'Language', langName: 'English',
+  notifSet: 'Notification Settings', help: 'Help & Support', aboutApp: 'About App', logOut: 'Log Out', freePlan: 'Free Plan',
+  guest: 'Guest', guestMail: 'Data saved on this device', tabHome: 'Home', tabFlights: 'Flights', tabDocs: 'Documents', tabProfile: 'Profile',
+  next: 'Next', back: 'Back', calc: 'Calculate', save: 'Save', saved: 'Saved', viewAll: 'View all', homeCountry: 'Home country',
+  alertCreated: 'Alert created. Price monitoring is not connected yet.', soonMsg: 'Coming soon',
+},
+ar: {
+  tagline2: 'حياتك في الخليج، أبسط.', getStarted: 'ابدأ', logIn: 'تسجيل الدخول', welcomeBack: 'مرحبًا بعودتك', loginSub: 'سجل دخولك إلى حسابك',
+  email: 'البريد الإلكتروني', password: 'كلمة المرور', forgot: 'نسيت كلمة المرور؟', or: 'أو', google: 'المتابعة مع Google', apple: 'المتابعة مع Apple',
+  noAccount: 'ليس لديك حساب؟', signUp: 'إنشاء حساب', continueGuest: 'المتابعة كضيف',
+  acctSoon: 'الحسابات عبر الإنترنت قادمة قريبًا. تابع الآن كضيف: بياناتك تبقى على هذا الجهاز.',
+  setupT: 'إعداد ملفك', yourName: 'اسمك الأول', whereLive: 'أين تقيم؟', start: 'ابدأ',
+  flightsCard: 'تنبيهات الرحلات', flightsCardT: 'احصل على إشعارات عند انخفاض أسعار الرحلات.', createAlertShort: 'إنشاء تنبيه',
+  docsCard: 'مستنداتي', docsCardT: 'تابع تواريخ الانتهاء واحصل على تذكيرات.', viewDocs: 'عرض المستندات',
+  gratCard: 'مكافأة نهاية الخدمة', gratCardT: 'احسب مكافأتك التقديرية.', calcNow: 'احسب الآن',
+  guideCard: 'دليل الوصول', guideCardT: 'الخطوات الخمس لكل مقيم جديد.', openGuide: 'افتح الدليل',
+  nextRem: 'التذكيرات القادمة', inDays: 'خلال {n} يومًا', daysN: '{n} يومًا', noRem: 'لا توجد تذكيرات بعد. أضف مستندًا ليظهر تاريخ انتهائه هنا.',
+  myAlerts: 'تنبيهاتي', popular: 'الوجهات الشائعة', maxL: 'الحد الأقصى', lastPrice: 'آخر سعر', notYet: 'لم يُفحص بعد',
+  popularT: 'مسارات شائعة من مدينتك. اضغط على أحدها لإنشاء تنبيه سعر.',
+  tripDetails: 'تفاصيل الرحلة', tripType: 'نوع الرحلة', round: 'ذهاب وعودة', oneway: 'ذهاب فقط', depart: 'تاريخ المغادرة', ret: 'تاريخ العودة',
+  passengers: 'عدد المسافرين', cabin: 'درجة السفر', maxPrice: 'الحد الأقصى للسعر', direct: 'رحلات مباشرة فقط', flexDates: 'تواريخ مرنة',
+  createAlert: 'إنشاء تنبيه رحلة', createBtn: 'إنشاء التنبيه', all: 'الكل', docsTitle: 'مستنداتي', flightsTitle: 'تنبيهات الرحلات',
+  gratTitle: 'مكافأة نهاية الخدمة', sCountry: 'الدولة', sJob: 'العمل', sResult: 'النتيجة', selCountry: 'اختر الدولة',
+  profile: 'ملفي الشخصي', personal: 'المعلومات الشخصية', countryCur: 'البلد والعملة', language: 'اللغة', langName: 'العربية',
+  notifSet: 'إعدادات الإشعارات', help: 'المساعدة والدعم', aboutApp: 'حول التطبيق', logOut: 'تسجيل الخروج', freePlan: 'الخطة المجانية',
+  guest: 'ضيف', guestMail: 'البيانات محفوظة على هذا الجهاز', tabHome: 'الرئيسية', tabFlights: 'الرحلات', tabDocs: 'المستندات', tabProfile: 'الملف الشخصي',
+  next: 'التالي', back: 'رجوع', calc: 'احسب', save: 'حفظ', saved: 'تم الحفظ', viewAll: 'عرض الكل', homeCountry: 'البلد الأصلي',
+  alertCreated: 'تم إنشاء التنبيه. مراقبة الأسعار غير متصلة بعد.', soonMsg: 'قريبًا',
+} };
+Object.assign(T.en, EXTRA.en); Object.assign(T.ar, EXTRA.ar);
+
+const ICON = {
+  home: '<path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  flight: '<path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/>',
+  doc: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm0 0v6h6M8 13h8M8 17h6"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',
+  bell: '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10 20a2 2 0 0 0 4 0"/>',
+  calc: '<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 11h2M14 11h2M8 15h2M14 15h2M8 19h2M14 19h2"/>',
+  list: '<path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/>',
+  back: '<path d="M19 12H5M11 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+  lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  chev: '<path d="m9 6 6 6-6 6"/>', down: '<path d="m6 9 6 6 6-6"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  cal: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  dots: '<circle cx="12" cy="5" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="12" cy="19" r="1.2"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+  eye: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/>',
+  logout: '<path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 17l-5-5 5-5M5 12h11"/>',
+  pin: '<path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+  star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+  check: '<path d="m5 12 5 5 9-10"/>', trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  idcard: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6 16c.5-1.5 1.7-2 3-2s2.5.5 3 2M14 10h4M14 13h3"/>',
+};
+const ic = (n, cls = '') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n]}</svg>`;
+
+// ---------- brand art ----------
+const shield = () => `<svg class="shield" viewBox="0 0 64 74" aria-hidden="true"><defs><linearGradient id="shg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1A5486"/><stop offset="1" stop-color="#062743"/></linearGradient></defs>
+<path d="M32 2 58 10v22c0 19-12 32-26 40C18 64 6 51 6 32V10z" fill="url(#shg)" stroke="#fff" stroke-width="2.5" stroke-opacity=".9"/>
+<path d="M16 50C24 34 36 22 52 17c-9 6-15 13-19 20 6-4 11-6 16-6-10 8-21 15-33 19z" fill="#fff"/>
+<path d="M18 54c10-3 20-8 30-16" stroke="#C9A86A" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
+const brand = (size = '') => `<div class="brand ${size}">${shield()}<div><b>ExpatGuard</b><span>GulfExpat Hub</span></div></div>`;
+
+let skyN = 0;
+function skyline() {
+  const id = 'sk' + (skyN++);
+  const towers = [[8, 20, 62], [30, 14, 88], [46, 22, 54], [70, 16, 112], [88, 20, 78], [110, 12, 132], [124, 18, 96], [146, 24, 70], [196, 18, 104], [216, 14, 84], [300, 20, 92], [322, 14, 126], [338, 22, 72], [362, 16, 104], [380, 24, 60]];
+  const rects = towers.map(([x, w, h], i) => `<rect x="${x}" y="${200 - h}" width="${w}" height="${h}" rx="${i % 3 ? 1 : 3}" fill="url(#${id}t)" opacity="${0.75 + (i % 4) * 0.07}"/>`).join('');
+  const city = `${rects}<path d="M172 200V82l10-26 10 26v118z" fill="url(#${id}t)"/><path d="M238 200V96c0-30 6-44 13-50 7 6 13 20 13 50v104z" fill="url(#${id}t)"/><path d="M276 200l5-74-6-38h24l-6 38 5 74z" fill="url(#${id}t)" opacity=".9"/>`;
+  return `<svg class="sky" viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs>
+<linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6F97BC"/><stop offset=".55" stop-color="#C6D3DD"/><stop offset="1" stop-color="#F2DEC4"/></linearGradient>
+<linearGradient id="${id}t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#58768E"/><stop offset="1" stop-color="#334E66"/></linearGradient>
+<linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#93AABA"/><stop offset="1" stop-color="#3E5E78"/></linearGradient>
+<radialGradient id="${id}g" cx=".78" cy=".64" r=".35"><stop offset="0" stop-color="#FFE9C9" stop-opacity=".9"/><stop offset="1" stop-color="#FFE9C9" stop-opacity="0"/></radialGradient></defs>
+<rect width="400" height="300" fill="url(#${id}s)"/><rect width="400" height="300" fill="url(#${id}g)"/>${city}
+<rect y="200" width="400" height="100" fill="url(#${id}w)"/><g transform="translate(0 400) scale(1 -1)" opacity=".18">${city}</g>
+<path d="M0 214h400M40 230h120M220 240h150M0 262h400" stroke="#fff" stroke-opacity=".18"/></svg>`;
+}
+
+// ---------- flags ----------
+const zig = (xa, xb, n, h = 32) => { let p = `${xa},0`; const s = h / n; for (let i = 0; i < n; i++) p += ` ${xb},${s * i + s / 2} ${xa},${s * (i + 1)}`; return p; };
+const FLAGSVG = {
+  QA: `<rect width="32" height="32" fill="#8A1538"/><polygon points="0,0 ${zig(10, 14, 9)} 0,32" fill="#fff"/>`,
+  BH: `<rect width="32" height="32" fill="#CE1126"/><polygon points="0,0 ${zig(10, 15, 5)} 0,32" fill="#fff"/>`,
+  AE: '<rect width="32" height="32" fill="#fff"/><rect width="32" height="10.7" fill="#00843D"/><rect y="21.3" width="32" height="10.7" fill="#111"/><rect width="10" height="32" fill="#EF3340"/>',
+  SA: '<rect width="32" height="32" fill="#006C35"/><rect x="8" y="10" width="16" height="6" rx="2" fill="#fff" opacity=".92"/><path d="M8 20.5h15.5l1.5-1.5" stroke="#fff" stroke-width="1.6" fill="none"/>',
+  KW: '<rect width="32" height="32" fill="#fff"/><rect width="32" height="10.7" fill="#007A3D"/><rect y="21.3" width="32" height="10.7" fill="#CE1126"/><path d="M0 0l10 10.7v10.6L0 32z" fill="#111"/>',
+  OM: '<rect width="32" height="32" fill="#DB161B"/><rect x="11" width="21" height="10.7" fill="#fff"/><rect x="11" y="21.3" width="21" height="10.7" fill="#008000"/>',
+};
+const flag = (c, cls = '') => FLAGSVG[c] ? `<span class="flag ${cls}"><svg viewBox="0 0 32 32" aria-hidden="true">${FLAGSVG[c]}</svg></span>` : `<span class="plane">${ic('flight')}</span>`;
+
+const GCC = [['QA', 'QAR'], ['AE', 'AED'], ['SA', 'SAR'], ['KW', 'KWD'], ['BH', 'BHD'], ['OM', 'OMR']];
+const CUR = Object.fromEntries(GCC);
+const AIRPORTS = [
+  ['DOH', 'Doha', 'الدوحة'], ['DXB', 'Dubai', 'دبي'], ['AUH', 'Abu Dhabi', 'أبوظبي'], ['SHJ', 'Sharjah', 'الشارقة'], ['RUH', 'Riyadh', 'الرياض'], ['JED', 'Jeddah', 'جدة'],
+  ['DMM', 'Dammam', 'الدمام'], ['KWI', 'Kuwait City', 'مدينة الكويت'], ['BAH', 'Manama', 'المنامة'], ['MCT', 'Muscat', 'مسقط'], ['TUN', 'Tunis', 'تونس'], ['CMN', 'Casablanca', 'الدار البيضاء'],
+  ['ALG', 'Algiers', 'الجزائر'], ['CAI', 'Cairo', 'القاهرة'], ['BEY', 'Beirut', 'بيروت'], ['AMM', 'Amman', 'عمّان'], ['IST', 'Istanbul', 'إسطنبول'], ['BOM', 'Mumbai', 'مومباي'],
+  ['DEL', 'Delhi', 'دلهي'], ['COK', 'Kochi', 'كوتشي'], ['HYD', 'Hyderabad', 'حيدر آباد'], ['BLR', 'Bengaluru', 'بنغالور'], ['MAA', 'Chennai', 'تشيناي'], ['KHI', 'Karachi', 'كراتشي'],
+  ['LHE', 'Lahore', 'لاهور'], ['MNL', 'Manila', 'مانيلا'], ['CMB', 'Colombo', 'كولومبو'], ['KTM', 'Kathmandu', 'كاتماندو'], ['DAC', 'Dhaka', 'دكا'], ['NBO', 'Nairobi', 'نيروبي'],
+  ['LHR', 'London', 'لندن'], ['CDG', 'Paris', 'باريس']];
+const HOME_AIRPORT = { QA: 'DOH', AE: 'DXB', SA: 'RUH', KW: 'KWI', BH: 'BAH', OM: 'MCT' };
+const AP_COUNTRY = { DOH: 'QA', DXB: 'AE', AUH: 'AE', SHJ: 'AE', RUH: 'SA', JED: 'SA', DMM: 'SA', KWI: 'KW', BAH: 'BH', MCT: 'OM' };
+const POPULAR = ['TUN', 'CAI', 'BOM', 'MNL', 'COK', 'KHI', 'CMN', 'BEY'];
+
+// ---------- state (this browser only) ----------
+const KEY = 'expatguard_v1';
+const DEFAULT = { lang: 'en', country: 'QA', home: null, onboarded: false, name: '', email: '', docs: [], alerts: [], guide: {} };
+let S = (() => { try { return { ...DEFAULT, ...JSON.parse(localStorage.getItem(KEY) || '{}') }; } catch { return { ...DEFAULT }; } })();
+const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} };
+let V = { tab: 'home', screen: null, p: {}, pre: 'welcome', form: null, err: [], confirm: false, loginMsg: false };
+
+const t = (k) => T[S.lang][k] ?? T.en[k] ?? k;
+const OL = () => (S.lang === 'ar' ? 'en' : 'ar');
+const t2 = (k) => T[OL()][k] ?? T.en[k] ?? k;
+const fill = (s, o) => s.replace(/\{(\w+)\}/g, (_, k) => o[k] ?? '');
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+const biS = (a, b, cls = '') => `<span class="bi ${cls}"><span>${a}</span><span class="alt" lang="${OL()}"><bdi>${b}</bdi></span></span>`;
+const bi = (k, cls = '') => biS(t(k), t2(k), cls);
+const inlS = (a, b) => `<span class="inl">${a} <span class="sl">/</span> <bdi class="alt-i" lang="${OL()}">${b}</bdi></span>`;
+const inl = (k) => inlS(t(k), t2(k));
+const cname = (c) => t('countries')[c], cname2 = (c) => t2('countries')[c];
+const todayISO = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
+const daysLeft = (iso) => Math.round((Date.parse(iso) - Date.parse(todayISO())) / 86400000);
+const fmtDate = (iso) => new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar-QA-u-nu-latn' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(iso + 'T00:00:00Z'));
+const ap = (c) => AIRPORTS.find((x) => x[0] === c) || [c, c, c];
+const city = (c) => ap(c)[S.lang === 'ar' ? 2 : 1], city2 = (c) => ap(c)[S.lang === 'ar' ? 1 : 2];
+const airport = (code) => `${city(code)} (⁦${code}⁩)`;
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random());
+const initials = () => (S.name || t('guest')).trim().slice(0, 1).toUpperCase();
+function toast(msg) { const el = document.getElementById('toast'); el.textContent = msg; el.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => (el.hidden = true), 2600); }
+
+const DOC_STYLE = { qatar_id: ['idcard', 'var(--green)'], emirates_id: ['idcard', 'var(--green)'], saudi_iqama: ['idcard', 'var(--green)'], passport: ['doc', 'var(--indigo)'], driving_licence: ['idcard', 'var(--purple)'], residence_permit: ['idcard', 'var(--blue)'], rental_contract: ['doc', 'var(--green)'], insurance: ['doc', 'var(--blue)'], custom: ['doc', 'var(--amber)'] };
+const TYPE_COUNTRY = { qatar_id: 'QA', emirates_id: 'AE', saudi_iqama: 'SA' };
+const docCountry = (d) => d.country || TYPE_COUNTRY[d.type] || S.country;
+function docStatus(d) { const n = daysLeft(d.expiry); return n < 0 ? 'expired' : n <= 30 ? 'soon' : 'valid'; }
+function docPill(d) {
+  const n = daysLeft(d.expiry); const s = docStatus(d);
+  const label = n < 0 ? t('gExpired') : n === 0 ? t('today') : n < 365 ? fill(t('daysN'), { n }) : fill(S.lang === 'ar' ? '{n} سنة' : '{n} years', { n: Math.floor(n / 365) });
+  return `<span class="pill ${s === 'expired' ? 'err' : s === 'soon' ? 'warn' : 'ok'} num">${label}</span>`;
+}
+const banner = (txt, icon = 'info') => `<div class="banner">${ic(icon)}<span>${txt}</span></div>`;
+const empty = (icon, title, msg, action = '') => `<div class="card empty stack">${ic(icon)}<h3>${title}</h3>${msg ? `<p class="muted small">${msg}</p>` : ''}${action}</div>`;
+const topbar = (k, extra = '') => `<header class="topbar pad"><button class="iconbtn" data-a="back" aria-label="${t('back')}">${ic('back', 'flip')}</button><h1 class="grow">${bi(k)}</h1>${extra}</header>`;
+const fab = (v, k) => `<button class="fab" data-a="go" data-v="${v}" aria-label="${t(k)}">${ic('plus')}</button>`;
+const langSw = (boxed = '') => `<div class="langsw ${boxed}"><button class="${S.lang === 'en' ? 'on' : ''}" data-a="setLang" data-v="en">EN</button><span>|</span><button class="${S.lang === 'ar' ? 'on' : ''}" data-a="setLang" data-v="ar" lang="ar">العربية</button></div>`;
+const errs = () => V.err.map((e) => `<p class="err-text">${e}</p>`).join('');
+
+// ---------- pre-app screens ----------
+function welcome() {
+  return `<section class="welcome">${skyline()}
+  <div class="wtop pad">${langSw()}</div>
+  <div class="wbrand pad">${brand('lg')}<p class="wtag">${biS(t('tagline2'), t2('tagline2'))}</p></div>
+  <div class="wbottom pad"><button class="btn ghost" data-a="pre" data-v="setup">${inl('getStarted')}</button><button class="btn ghost" data-a="pre" data-v="login">${inl('logIn')}</button><div class="dots"><i class="on"></i><i></i><i></i></div></div></section>`;
+}
+function login() {
+  return `<section class="pre pad screen"><div><button class="iconbtn" data-a="pre" data-v="welcome" aria-label="${t('back')}">${ic('back', 'flip')}</button></div>
+  <div class="stack" style="align-items:center;text-align:center;gap:10px">${brand()}<h2 style="margin-top:14px">${bi('welcomeBack')}</h2><p class="muted small">${bi('loginSub')}</p></div>
+  <form class="stack" data-f="login" novalidate>
+    <label class="inp">${ic('mail')}<input id="l-email" type="email" autocomplete="email" placeholder="${t('email')} / ${t2('email')}"></label>
+    <label class="inp">${ic('lock')}<input id="l-pass" type="password" autocomplete="current-password" placeholder="${t('password')} / ${t2('password')}">${ic('eye')}</label>
+    <div style="text-align:end"><button type="button" class="link" data-a="soon">${inl('forgot')}</button></div>
+    ${V.loginMsg ? banner(t('acctSoon')) : ''}
+    <button class="btn" type="submit">${inl('logIn')}</button>
+  </form>
+  <div class="or">${t('or')} / ${t2('or')}</div>
+  <button class="btn social" data-a="soon"><span class="gmark">G</span>${t('google')}</button>
+  <button class="btn social" data-a="soon">${t('apple')}</button>
+  <button class="btn alt" data-a="pre" data-v="setup">${inl('continueGuest')}</button>
+  <p class="center small muted">${t('noAccount')} <button class="link" data-a="pre" data-v="setup">${inl('signUp')}</button></p>
+  <div class="center">${langSw('boxed')}</div></section>`;
+}
+function setup() {
+  return `<section class="pre pad screen"><div class="row"><button class="iconbtn" data-a="pre" data-v="welcome" aria-label="${t('back')}">${ic('back', 'flip')}</button><span class="grow"></span>${langSw('boxed')}</div>
+  ${brand()}<h2>${bi('setupT')}</h2>
+  <label class="field">${inl('yourName')}<input id="s-name" maxlength="40" value="${esc(S.name)}" autocomplete="given-name"></label>
+  <div class="lbl">${inl('whereLive')}</div>
+  <div class="grid2">${GCC.map(([c]) => `<button class="ccard ${S.country === c ? 'on' : ''}" data-a="setupCountry" data-v="${c}">${flag(c)}${biS(cname(c), cname2(c))}</button>`).join('')}</div>
+  <label class="field">${inl('homeCountry')}<select id="s-home"><option value="">${t('notSet')}</option>${Object.entries(t('hcountries')).map(([c, n]) => `<option value="${c}" ${S.home === c ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+  <p class="muted small">${t('readyS')}</p>
+  <button class="btn" data-a="finishSetup">${inl('start')}</button></section>`;
+}
+
+// ---------- main screens ----------
+function fcard(icon, color, titleK, descK, btnK, headA, headV, btnA, btnV) {
+  return `<div class="fcard"><button class="fhead" data-a="${headA}" data-v="${headV}"><span class="fdot" style="--c:${color}">${ic(icon)}</span><span class="grow">${bi(titleK)}<span class="fdesc">${bi(descK)}</span></span>${ic('chev', 'flip')}</button><button class="pillbtn" data-a="${btnA}" data-v="${btnV}">${inl(btnK)}</button></div>`;
+}
+function reminderRow(d) {
+  const [i] = DOC_STYLE[d.type] || DOC_STYLE.custom; const n = daysLeft(d.expiry);
+  return `<button class="card rem" data-a="go" data-v="docForm" data-id="${d.id}"><span class="sq" style="--c:var(--amber)">${ic(i)}</span><span class="grow"><b style="font-size:13.5px">${esc(d.name)}</b><span class="small muted" style="display:block">${t('types')[d.type]} · ${cname(docCountry(d))}</span></span><span class="small num">${fmtDate(d.expiry)}</span><span class="pill ${n <= 30 ? 'err' : 'warn'} num">${fill(t('inDays'), { n })}</span></button>`;
+}
+function home() {
+  const h = new Date().getHours();
+  const gk = h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening';
+  const nm = S.name ? `, ${esc(S.name)}` : '';
+  const rems = [...S.docs].filter((d) => daysLeft(d.expiry) >= 0).sort((a, b) => a.expiry.localeCompare(b.expiry)).slice(0, 3);
+  return `<div class="screen">
+  <div class="hhead pad">${skyline()}
+    <div class="row" style="align-items:flex-start"><div class="greet grow"><div>${t(gk)}${nm}</div><div class="alt" lang="${OL()}"><bdi>${t2(gk)}${nm}</bdi></div></div>
+      <button class="iconbtn" data-a="go" data-v="notifications" aria-label="${t('notifTitle')}">${ic('bell')}</button><button class="avatar" data-a="tab" data-v="profile" aria-label="${t('profile')}">${initials()}</button></div>
+    <div style="margin-top:16px"><button class="cpill" data-a="go" data-v="countrySel">${flag(S.country, 'sm')}${city(HOME_AIRPORT[S.country])}, ${cname(S.country)}${ic('down')}</button></div>
+  </div>
+  <div class="sheet pad stack">
+    ${fcard('flight', 'var(--blue)', 'flightsCard', 'flightsCardT', 'createAlertShort', 'tab', 'flights', 'go', 'newAlert')}
+    ${fcard('doc', 'var(--green)', 'docsCard', 'docsCardT', 'viewDocs', 'tab', 'docs', 'tab', 'docs')}
+    ${fcard('calc', 'var(--blue)', 'gratCard', 'gratCardT', 'calcNow', 'go', 'gratuity', 'go', 'gratuity')}
+    ${fcard('list', 'var(--amber)', 'guideCard', 'guideCardT', 'openGuide', 'go', 'guide', 'go', 'guide')}
+    <div class="sect"><span>${inl('nextRem')}</span><button class="link" data-a="tab" data-v="docs">${inl('viewAll')}</button></div>
+    ${rems.length ? rems.map(reminderRow).join('') : `<div class="card small muted">${t('noRem')}</div>`}
+  </div></div>`;
+}
+
+function alertStatus(a) { return a.depart < todayISO() ? 'expired' : a.paused ? 'paused' : 'active'; }
+function alertCard(a) {
+  const s = alertStatus(a);
+  const pill = s === 'active' ? `<span class="pill solid-ok">${inlS(T[S.lang].aActive, T[OL()].aActive)}</span>` : s === 'paused' ? `<span class="pill solid-warn">${inlS(T[S.lang].aPaused, T[OL()].aPaused)}</span>` : `<span class="pill mute">${t('aExpired')}</span>`;
+  const arrow = (S.lang === 'ar') ? '←' : '→', arrow2 = (S.lang === 'ar') ? '→' : '←';
+  return `<button class="card acard" data-a="go" data-v="alertDetail" data-id="${a.id}">${flag(AP_COUNTRY[a.origin])}<span class="grow">
+    <span class="row"><span class="route grow">${city(a.origin)} ${arrow} ${city(a.dest)}</span>${pill}</span>
+    <bdi class="alt" lang="${OL()}">${city2(a.origin)} ${arrow2} ${city2(a.dest)}</bdi>
+    <span class="meta">${ic('clock')}<span class="num">${fmtDate(a.depart)}${a.ret ? ' – ' + fmtDate(a.ret) : ''}</span></span>
+    <span class="kv" style="display:block;margin-top:4px">${t('maxL')}: <b class="num">${formatMinor(a.max, a.cur)}</b></span>
+    <span class="kv" style="display:block">${t('lastPrice')}: ${t('notYet')}</span></span>${ic('dots', 'muted')}</button>`;
+}
+function flights() {
+  const tabK = V.p.ftab || 'mine';
+  const seg = `<div class="seg"><button class="${tabK === 'mine' ? 'on' : ''}" data-a="ftab" data-v="mine">${biS(t('myAlerts'), t2('myAlerts'))}</button><button class="${tabK === 'pop' ? 'on' : ''}" data-a="ftab" data-v="pop">${biS(t('popular'), t2('popular'))}</button></div>`;
+  let body;
+  if (tabK === 'mine') {
+    const list = [...S.alerts].sort((x, y) => ({ active: 0, paused: 1, expired: 2 })[alertStatus(x)] - ({ active: 0, paused: 1, expired: 2 })[alertStatus(y)]);
+    body = list.length ? list.map(alertCard).join('') : empty('bell', t('flEmpty'), t('flEmptyT'), `<button class="btn" data-a="go" data-v="newAlert">${inl('createBtn')}</button>`);
+  } else {
+    const o = HOME_AIRPORT[S.country];
+    body = `<p class="muted small">${t('popularT')}</p>` + POPULAR.map((d) => `<button class="card acard" data-a="quickAlert" data-v="${d}">${flag(S.country)}<span class="grow"><span class="route">${city(o)} ${S.lang === 'ar' ? '←' : '→'} ${city(d)}</span><bdi class="alt" lang="${OL()}">${city2(o)} – ${city2(d)}</bdi></span><span class="pill ok">${inlS(t('createAlertShort'), t2('createAlertShort'))}</span></button>`).join('');
+  }
+  return `<div class="screen">${topbar('flightsTitle', fab('newAlert', 'createAlert'))}<div class="pad stack">${seg}${banner(t('monitorOff'))}${body}</div></div>`;
+}
+function newAlert(prefill) {
+  const f = V.form;
+  const opts = (sel) => `<option value="">—</option>` + AIRPORTS.map(([c]) => `<option value="${c}" ${sel === c ? 'selected' : ''}>${airport(c)}</option>`).join('');
+  return `<div class="screen">${topbar('createAlert')}
+  <form class="pad stack" data-f="createAlert" novalidate style="padding-bottom:20px">
+    <div class="lbl">${inl('tripDetails')}</div>
+    <div class="grid2"><label class="field">${inl('from')}<span class="selbox">${flag(AP_COUNTRY[f.origin], 'sm')}<select id="a-origin" data-c="alertAp">${opts(f.origin)}</select></span></label>
+    <label class="field">${inl('to')}<span class="selbox">${flag(AP_COUNTRY[f.dest], 'sm')}<select id="a-dest" data-c="alertAp">${opts(f.dest)}</select></span></label></div>
+    <div class="lbl">${inl('tripType')}</div>
+    <div class="seg">${['round', 'oneway'].map((k) => `<button type="button" class="${f.trip === k ? 'on' : ''}" data-a="trip" data-v="${k}">${inl(k)}</button>`).join('')}</div>
+    <div class="grid2"><label class="field">${inl('depart')}<input id="a-depart" type="date" value="${f.depart || ''}" min="${todayISO()}"></label>
+    ${f.trip === 'round' ? `<label class="field">${inl('ret')}<input id="a-ret" type="date" value="${f.ret || ''}" min="${todayISO()}"></label>` : '<span></span>'}</div>
+    <div class="grid2"><label class="field">${inl('passengers')}<span class="stepper"><b class="num">${f.adults}</b><button type="button" data-a="count" data-v="-1" ${f.adults <= 1 ? 'disabled' : ''} aria-label="−">−</button><button type="button" data-a="count" data-v="1" ${f.adults >= 9 ? 'disabled' : ''} aria-label="+">+</button></span></label>
+    <label class="field">${inl('cabin')}<select id="a-cabin">${Object.keys(T.en.cabins).map((k) => `<option value="${k}" ${f.cabin === k ? 'selected' : ''}>${t('cabins')[k]} / ${t2('cabins')[k]}</option>`).join('')}</select></label></div>
+    <label class="field">${inl('maxPrice')}<span class="row"><input id="a-price" inputmode="decimal" value="${esc(f.price)}" placeholder="1,200" style="flex:2"><select id="a-cur" style="flex:1">${GCC.map(([, c]) => `<option ${f.cur === c ? 'selected' : ''}>${c}</option>`).join('')}</select></span></label>
+    <label class="sw"><span class="tick">${ic('check')}</span><span class="grow">${inl('direct')}</span><input type="checkbox" id="a-direct" role="switch" ${f.direct ? 'checked' : ''}></label>
+    <label class="sw"><span class="tick">${ic('check')}</span><span class="grow">${inl('flexDates')}</span><input type="checkbox" id="a-flexd" role="switch" ${f.flex ? 'checked' : ''}></label>
+    ${errs()}
+    <button class="btn" type="submit">${inl('createBtn')}</button>
+    <p class="muted small">${t('honesty')}</p>
+  </form></div>`;
+}
+function alertDetail() {
+  const a = S.alerts.find((x) => x.id === V.p.id); if (!a) return flights();
+  const s = alertStatus(a);
+  return `<div class="screen">${topbar('flightsTitle')}<div class="pad stack">${alertCard(a)}${banner(t('monitorOff'))}
+    ${s === 'active' ? `<button class="btn alt" data-a="pauseAlert">${t('pause')}</button>` : s === 'paused' ? `<button class="btn" data-a="pauseAlert">${t('resume')}</button>` : ''}
+    ${V.confirm ? `<div class="card confirm stack"><h3>${t('confirmDel')}</h3><div class="grid2"><button class="btn alt" data-a="cancelDel">${t('cancel')}</button><button class="btn danger" data-a="delAlert">${t('yesDel')}</button></div></div>` : `<button class="btn danger" data-a="askDel">${t('del')}</button>`}
+  </div></div>`;
+}
+
+function docCard(d) {
+  const [i, c] = DOC_STYLE[d.type] || DOC_STYLE.custom; const s = docStatus(d);
+  return `<button class="card dcard" data-a="go" data-v="docForm" data-id="${d.id}"><span class="dicon" style="--c:${c}">${ic(i)}</span><span class="grow"><span class="row" style="align-items:flex-start"><h3 class="grow">${esc(d.name)}</h3>${ic('dots', 'muted')}</span><span class="sub">${t('types')[d.type]} · ${cname(docCountry(d))}</span>
+    <span class="row" style="margin-top:8px"><span class="meta grow ${s !== 'valid' ? 'date-red' : ''}" style="margin:0">${ic('cal')}<span class="num">${fmtDate(d.expiry)}</span></span>${docPill(d)}</span></span></button>`;
+}
+function documents() {
+  const dc = V.p.dc || 'all';
+  const docs = [...S.docs].filter((d) => dc === 'all' || docCountry(d) === dc).sort((a, b) => a.expiry.localeCompare(b.expiry));
+  const chips = `<div class="chips"><button class="${dc === 'all' ? 'on' : ''}" data-a="dc" data-v="all">${biS(t('all'), t2('all'))}</button>${GCC.map(([c]) => `<button class="${dc === c ? 'on' : ''}" data-a="dc" data-v="${c}">${biS(cname(c), cname2(c))}</button>`).join('')}</div>`;
+  return `<div class="screen">${topbar('docsTitle', fab('docForm', 'docAdd'))}<div class="pad stack">${chips}
+    ${docs.length ? docs.map(docCard).join('') : empty('doc', t('docEmpty'), t('docEmptyT'), `<button class="btn" data-a="go" data-v="docForm">${inl('docAdd')}</button>`)}
+  </div></div>`;
+}
+function docForm() {
+  const f = V.form; const types = t('types');
+  return `<div class="screen">${topbar(f.id ? 'docEdit' : 'docAdd')}
+  <form class="pad stack" data-f="saveDoc" novalidate style="padding-bottom:20px">
+    ${banner(t('docPrivacy'), 'lock')}
+    <label class="field">${t('docType')}<select id="d-type" data-c="docType">${Object.entries(types).map(([k, v]) => `<option value="${k}" ${f.type === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
+    <label class="field">${t('docName')}<input id="d-name" maxlength="80" value="${esc(f.name)}"></label>
+    <label class="field">${t('residence')}<select id="d-country">${GCC.map(([c]) => `<option value="${c}" ${f.country === c ? 'selected' : ''}>${cname(c)}</option>`).join('')}</select></label>
+    <label class="field">${t('expiry')}<input id="d-exp" type="date" value="${f.expiry || ''}" min="2000-01-01" max="2100-12-31"></label>
+    <div class="lbl">${t('remind')}</div><div class="chips wrap">${[90, 60, 30, 14, 7, 1].map((n) => `<button type="button" class="${f.offsets.includes(n) ? 'on' : ''}" data-a="toggleOffset" data-v="${n}">${n === 1 ? t('before1') : fill(t('before'), { n })}</button>`).join('')}</div>
+    <label class="field">${t('notes')}<input id="d-notes" maxlength="200" value="${esc(f.notes)}"></label>
+    ${errs()}
+    <button class="btn" type="submit">${inl('save')}</button>
+    ${f.id ? (V.confirm ? `<div class="card confirm stack"><h3>${t('confirmDel')}</h3><div class="grid2"><button type="button" class="btn alt" data-a="cancelDel">${t('cancel')}</button><button type="button" class="btn danger" data-a="delDoc">${t('yesDel')}</button></div></div>` : `<button type="button" class="btn danger" data-a="askDel">${t('del')}</button>`) : ''}
+  </form></div>`;
+}
+
+function gratuity() {
+  const g = V.form; const step = g.step;
+  const stepper = `<div class="steps">${['sCountry', 'sJob', 'sResult'].map((k, i) => `<div class="${i <= step ? 'on' : ''}"><b>${i + 1}</b>${biS(t(k), t2(k))}</div>`).join('')}</div>`;
+  let body = '';
+  if (step === 0) body = `<div class="lbl">${inl('selCountry')}</div><div class="grid2">${GCC.map(([c]) => `<button class="ccard ${g.country === c ? 'on' : ''}" data-a="gCountry" data-v="${c}">${flag(c)}${biS(cname(c), cname2(c))}</button>`).join('')}</div><button class="btn" data-a="gStep" data-v="1" style="margin-top:8px">${inl('next')}</button><div class="band">${skyline()}</div>`;
+  if (step === 1) {
+    const cur = CUR[g.country];
+    body = `<form class="stack" data-f="gCalc" novalidate><div class="row">${flag(g.country)}<b>${cname(g.country)}</b></div>
+      <div class="grid2"><label class="field">${t('startD')}<input id="g-start" type="date" value="${g.start || ''}" min="1980-01-01"></label>
+      <label class="field">${t('endD')}<input id="g-end" type="date" value="${g.end || ''}"></label></div>
+      <label class="field">${g.country === 'SA' ? t('last') : t('basic')} (${cur})<input id="g-wage" inputmode="decimal" value="${esc(g.wage)}"></label>
+      ${g.country === 'BH' ? `<label class="field">${t('social')} (${cur})<input id="g-social" inputmode="decimal" value="${esc(g.social)}"></label>` : ''}
+      <p class="muted small">${t('salaryNote')}</p>
+      <label class="field">${t('reason')}<select id="g-reason">${[['termination', 'rTerm'], ['contract_end', 'rEnd'], ['resignation', 'rResign']].map(([k, l]) => `<option value="${k}" ${g.reason === k ? 'selected' : ''}>${t(l)}</option>`).join('')}</select></label>
+      ${errs()}
+      <div class="grid2"><button type="button" class="btn alt" data-a="gStep" data-v="0">${inl('back')}</button><button class="btn" type="submit">${inl('calc')}</button></div></form>`;
+  }
+  if (step === 2) {
+    const r = g.result;
+    if (!r.available) body = `${empty('calc', t('unavailT'), r.reason === 'resignation_unconfirmed' ? t('resignU') : t('unavailM'))}<button class="btn alt" data-a="gStep" data-v="${r.reason === 'rule_unavailable' ? 0 : 1}">${inl('back')}</button>`;
+    else body = `${r.confirmed ? '' : banner(t('toConfirm'))}
+      <div class="card result stack" style="gap:6px;padding:22px"><span class="muted">${inl('estimated')}</span><span class="bigamount num">${r.eligible ? formatMinor(r.amount, r.currency) : t('notElig')}</span><span class="muted small">${fill(t('service'), { y: r.years, d: r.days })}</span></div>
+      <div class="lbl">${t('how')}</div><div class="card stack" style="gap:8px">${r.steps.map(([k, p]) => `<div class="row small num" style="align-items:flex-start"><span style="color:var(--green)">✓</span><span class="grow">${fill(t('st')[k], p)}</span></div>`).join('')}</div>
+      ${r.warnings.map((w) => banner(t(w === 'sio' ? 'wSio' : 'wBefore'))).join('')}
+      <div class="lbl">${t('legal')}</div><p class="small">${r.ref}</p><a class="link" href="${r.src}" target="_blank" rel="noopener">${t('source')} ↗</a>
+      <p class="muted small">${t('disclaimer')}</p><button class="btn alt" data-a="gStep" data-v="1">${t('edit')}</button>`;
+  }
+  return `<div class="screen">${topbar('gratTitle')}<div class="pad stack" style="padding-bottom:16px">${stepper}${body}</div></div>`;
+}
+
+function guide() {
+  if (!V.p.country) {
+    return `<div class="screen">${topbar('guideTitle')}<div class="pad stack"><p class="muted small">${t('guideIntro')}</p>
+      ${GCC.map(([c]) => { const done = (S.guide[c] || []).length; return `<button class="card acard" data-a="guideCountry" data-v="${c}">${flag(c)}<span class="grow">${biS(cname(c), cname2(c))}<span class="small muted">${fill(t('progress'), { d: done, t: 5 })}</span></span>${ic('chev', 'flip muted')}</button>`; }).join('')}</div></div>`;
+  }
+  const c = V.p.country, done = S.guide[c] || [];
+  return `<div class="screen">${topbar('guideTitle')}<div class="pad stack"><div class="row">${flag(c)}<b>${cname(c)}</b></div>
+    <span class="small">${fill(t('progress'), { d: done.length, t: 5 })}</span><div class="bar"><i style="width:${done.length * 20}%"></i></div>
+    ${t('guideSteps').map((s, i) => `<label class="card check"><input type="checkbox" data-c="guideTick" data-v="${i}" ${done.includes(i) ? 'checked' : ''}><span class="grow"><b>${i + 1}. ${s}</b></span></label>`).join('')}
+    ${banner(t('guideVerify'))}</div></div>`;
+}
+function notifications() { return `<div class="screen">${topbar('notifTitle')}<div class="pad stack">${empty('bell', t('notifEmpty'), t('notifEmptyT'))}</div></div>`; }
+
+function profile() {
+  const item = (icon, k, a, v = '', val = '') => `<button data-a="${a}" data-v="${v}">${ic(icon)}<span class="grow">${bi(k)}</span>${val ? `<span class="val">${val}</span>` : ''}${ic('chev', 'flip muted')}</button>`;
+  return `<div class="screen">${topbar('profile')}<div class="pad stack">
+    <button class="card pcard" data-a="go" data-v="personal"><span class="bigav">${initials()}</span><span class="grow"><b style="font-size:18px;color:var(--head)">${esc(S.name || t('guest'))}</b><span class="small muted" style="display:block">${esc(S.email || t('guestMail'))}</span><span class="plan">${ic('star')}${inlS(t('freePlan'), t2('freePlan'))}</span></span>${ic('chev', 'flip muted')}</button>
+    <div class="menu">${item('user', 'personal', 'go', 'personal')}${item('globe', 'countryCur', 'go', 'countrySel', `${CUR[S.country]}`)}${item('globe', 'language', 'toggleLang', '', t('langName'))}${item('bell', 'notifSet', 'go', 'notifications')}${item('help', 'help', 'go', 'help')}${item('info', 'aboutApp', 'go', 'help')}</div>
+    <div class="menu danger"><button data-a="logout">${ic('logout')}<span class="grow">${bi('logOut')}</span></button></div>
+  </div></div>`;
+}
+function personal() {
+  return `<div class="screen">${topbar('personal')}<form class="pad stack" data-f="savePersonal" novalidate>
+    <label class="field">${inl('yourName')}<input id="p-name" maxlength="40" value="${esc(S.name)}" autocomplete="given-name"></label>
+    <label class="field">${inl('email')}<input id="p-email" type="email" maxlength="80" value="${esc(S.email)}" autocomplete="email"></label>
+    <label class="field">${inl('homeCountry')}<select id="p-home"><option value="">${t('notSet')}</option>${Object.entries(t('hcountries')).map(([c, n]) => `<option value="${c}" ${S.home === c ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+    <p class="muted small">${t('guestHint')}</p><button class="btn" type="submit">${inl('save')}</button></form></div>`;
+}
+function countrySel() {
+  return `<div class="screen">${topbar('countryCur')}<div class="pad stack"><div class="lbl">${inl('whereLive')}</div><div class="grid2">${GCC.map(([c, cur]) => `<button class="ccard ${S.country === c ? 'on' : ''}" data-a="pickCountry" data-v="${c}">${flag(c)}<span class="grow">${biS(cname(c), cname2(c))}<span class="small muted">${cur}</span></span></button>`).join('')}</div></div></div>`;
+}
+function help() {
+  return `<div class="screen">${topbar('help')}<div class="pad stack">
+    <div class="card stack" style="gap:8px">${brand()}<p class="small">${t('aboutT')}</p></div>
+    <div class="card stack" style="gap:8px"><b style="color:var(--head)">${t('privacy')}</b><p class="small">${t('privacyT')}</p></div>
+    <button class="card acard" data-a="go" data-v="guide"><span class="sq" style="--c:var(--amber)">${ic('list')}</span><span class="grow">${bi('guideCard')}</span>${ic('chev', 'flip muted')}</button>
+    ${V.confirm ? `<div class="card confirm stack"><h3>${t('confirmDel')}</h3><div class="grid2"><button class="btn alt" data-a="cancelDel">${t('cancel')}</button><button class="btn danger" data-a="resetAll">${t('yesDel')}</button></div></div>` : `<button class="btn danger" data-a="askDel">${t('reset')}</button>`}
+  </div></div>`;
+}
+
+// ---------- render & events ----------
+const SCREENS = { docForm, newAlert, alertDetail, gratuity, guide, notifications, personal, countrySel, help };
+function render() {
+  document.documentElement.lang = S.lang; document.documentElement.dir = t('dir');
+  document.body.classList.toggle('ar', S.lang === 'ar'); document.title = 'ExpatGuard';
+  const app = document.getElementById('app'), tabs = document.getElementById('tabs');
+  skyN = 0;
+  if (!S.onboarded) { app.classList.add('full'); app.innerHTML = { welcome, login, setup }[V.pre](); tabs.hidden = true; return; }
+  app.classList.remove('full'); tabs.hidden = false;
+  app.innerHTML = V.screen ? SCREENS[V.screen]() : { home, flights, docs: documents, profile }[V.tab]();
+  tabs.innerHTML = `<div class="in">${[['home', 'home', 'tabHome'], ['flights', 'flight', 'tabFlights'], ['docs', 'doc', 'tabDocs'], ['profile', 'user', 'tabProfile']].map(([k, i, l]) => { const on = !V.screen && V.tab === k; return `<button class="tab ${on ? 'on' : ''}" data-a="tab" data-v="${k}" aria-current="${on ? 'page' : 'false'}">${ic(i)}<span>${t(l)}</span><span class="alt2" lang="${OL()}">${t2(l)}</span></button>`; }).join('')}</div>`;
+}
+function go(screen, p = {}) {
+  V = { ...V, screen, p, err: [], confirm: false };
+  if (screen === 'docForm') {
+    const d = S.docs.find((x) => x.id === p.id);
+    V.form = d ? { ...d, country: docCountry(d), offsets: [...d.offsets] } : { id: null, type: 'qatar_id', name: t('types').qatar_id, country: S.country, expiry: '', offsets: [90, 30, 7, 1], notes: '' };
+  }
+  if (screen === 'newAlert') V.form = { origin: HOME_AIRPORT[S.country], dest: p.dest || '', trip: 'round', depart: '', ret: '', flex: 0, adults: 1, children: 0, cabin: 'economy', price: '', cur: CUR[S.country], direct: true, nb: true, nd: false };
+  if (screen === 'gratuity') V.form = { step: 0, country: S.country, start: '', end: '', wage: '', social: '', reason: 'termination', result: null };
+  render(); window.scrollTo(0, 0);
+}
+function readAlertForm() {
+  const f = V.form, v = (id) => document.getElementById(id)?.value ?? '';
+  Object.assign(f, { origin: v('a-origin'), dest: v('a-dest'), depart: v('a-depart'), ret: f.trip === 'round' ? v('a-ret') : '', cabin: v('a-cabin'), price: v('a-price'), cur: v('a-cur'),
+    direct: document.getElementById('a-direct').checked, flex: document.getElementById('a-flexd').checked ? 3 : 0 });
+}
+function readGratForm() {
+  const g = V.form, v = (id) => document.getElementById(id)?.value ?? '';
+  Object.assign(g, { start: v('g-start'), end: v('g-end'), wage: v('g-wage'), social: v('g-social'), reason: v('g-reason') });
+}
+function readDocForm() { const d = V.form, v = (id) => document.getElementById(id).value; Object.assign(d, { type: v('d-type'), name: v('d-name'), country: v('d-country'), expiry: v('d-exp'), notes: v('d-notes') }); }
+
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-a]'); if (!el || el.disabled) return;
+  const a = el.dataset.a, v = el.dataset.v;
+  if (a === 'tab') { V = { ...V, tab: v, screen: null, p: {}, confirm: false }; render(); window.scrollTo(0, 0); }
+  else if (a === 'go') go(v, { id: el.dataset.id });
+  else if (a === 'back') {
+    if (V.screen === 'guide' && V.p.country) { V.p = {}; render(); }
+    else if (V.screen) { V.screen = null; V.confirm = false; render(); }
+    else { V.tab = 'home'; V.p = {}; render(); }
+    window.scrollTo(0, 0);
+  }
+  else if (a === 'pre') { if (V.pre === 'setup') S.name = document.getElementById('s-name')?.value.trim() ?? S.name; V.pre = v; V.loginMsg = false; render(); window.scrollTo(0, 0); }
+  else if (a === 'soon') { V.loginMsg = true; render(); }
+  else if (a === 'setupCountry') { S.name = document.getElementById('s-name').value.trim(); S.country = v; persist(); render(); }
+  else if (a === 'finishSetup') { S.name = document.getElementById('s-name').value.trim(); S.home = document.getElementById('s-home').value || null; S.onboarded = true; V.tab = 'home'; V.screen = null; persist(); render(); window.scrollTo(0, 0); }
+  else if (a === 'setLang') { if (V.pre === 'setup' && !S.onboarded) S.name = document.getElementById('s-name')?.value.trim() ?? S.name; S.lang = v; persist(); render(); }
+  else if (a === 'toggleLang') { S.lang = S.lang === 'en' ? 'ar' : 'en'; persist(); render(); }
+  else if (a === 'logout') { S.onboarded = false; V.pre = 'welcome'; persist(); render(); window.scrollTo(0, 0); }
+  else if (a === 'pickCountry') { S.country = v; persist(); V.screen = null; render(); toast(t('saved')); }
+  else if (a === 'ftab') { V.p = { ftab: v }; render(); }
+  else if (a === 'dc') { V.p = { dc: v }; render(); }
+  else if (a === 'quickAlert') go('newAlert', { dest: v });
+  else if (a === 'toggleOffset') { readDocForm(); const n = +v; V.form.offsets = V.form.offsets.includes(n) ? V.form.offsets.filter((x) => x !== n) : [...V.form.offsets, n].sort((x, y) => y - x); render(); }
+  else if (a === 'askDel') { V.confirm = true; if (V.screen === 'docForm') readDocForm(); render(); }
+  else if (a === 'cancelDel') { V.confirm = false; render(); }
+  else if (a === 'delDoc') { S.docs = S.docs.filter((d) => d.id !== V.form.id); persist(); V.screen = null; V.tab = 'docs'; V.confirm = false; render(); }
+  else if (a === 'delAlert') { S.alerts = S.alerts.filter((x) => x.id !== V.p.id); persist(); V.screen = null; V.tab = 'flights'; V.confirm = false; render(); }
+  else if (a === 'pauseAlert') { const x = S.alerts.find((y) => y.id === V.p.id); x.paused = !x.paused; persist(); render(); }
+  else if (a === 'resetAll') { S = { ...DEFAULT, lang: S.lang, country: S.country, name: S.name, onboarded: true }; persist(); V.confirm = false; render(); toast(t('resetDone')); }
+  else if (a === 'trip') { readAlertForm(); V.form.trip = v; render(); }
+  else if (a === 'count') { readAlertForm(); V.form.adults = Math.min(9, Math.max(1, V.form.adults + +v)); render(); }
+  else if (a === 'gCountry') { V.form.country = v; render(); }
+  else if (a === 'gStep') { if (V.form.step === 1) readGratForm(); V.form.step = +v; V.err = []; render(); window.scrollTo(0, 0); }
+  else if (a === 'guideCountry') { V.p = { country: v }; render(); }
+});
+document.addEventListener('change', (e) => {
+  const el = e.target.closest('[data-c]'); if (!el) return;
+  const c = el.dataset.c;
+  if (c === 'docType') { const nameEl = document.getElementById('d-name'); if (!nameEl.value || Object.values(t('types')).includes(nameEl.value)) nameEl.value = t('types')[el.value]; if (TYPE_COUNTRY[el.value]) document.getElementById('d-country').value = TYPE_COUNTRY[el.value]; }
+  else if (c === 'alertAp') { readAlertForm(); render(); }
+  else if (c === 'guideTick') { const c2 = V.p.country, i = +el.dataset.v; const cur = new Set(S.guide[c2] || []); el.checked ? cur.add(i) : cur.delete(i); S.guide[c2] = [...cur].sort(); persist(); render(); }
+});
+document.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = e.target.dataset.f;
+  if (f === 'login') { V.loginMsg = true; render(); }
+  if (f === 'savePersonal') { S.name = document.getElementById('p-name').value.trim(); S.email = document.getElementById('p-email').value.trim(); S.home = document.getElementById('p-home').value || null; persist(); V.screen = null; render(); toast(t('saved')); }
+  if (f === 'saveDoc') {
+    readDocForm(); const d = V.form; d.name = d.name.trim(); d.notes = d.notes.trim();
+    V.err = []; if (!d.name) V.err.push(t('errName')); if (!/^\d{4}-\d{2}-\d{2}$/.test(d.expiry)) V.err.push(t('errExpiry'));
+    if (V.err.length) return render();
+    const rec = { id: d.id || uid(), type: d.type, name: d.name, country: d.country, expiry: d.expiry, offsets: d.offsets, notes: d.notes };
+    S.docs = [...S.docs.filter((x) => x.id !== rec.id), rec]; persist(); V.screen = null; V.tab = 'docs'; render(); toast(t('saved'));
+  }
+  if (f === 'createAlert') {
+    readAlertForm(); const a = V.form; V.err = [];
+    if (!a.origin) V.err.push(t('eOrigin')); if (!a.dest) V.err.push(t('eDest')); if (a.origin && a.origin === a.dest) V.err.push(t('eSame'));
+    if (!a.depart || a.depart < todayISO()) V.err.push(t('eDepart')); if (a.trip === 'round' && (!a.ret || a.ret < a.depart)) V.err.push(t('eReturn'));
+    const m = toMinor(a.price, a.cur); if (m === null || m <= 0n) V.err.push(t('ePrice'));
+    if (V.err.length) return render();
+    S.alerts.unshift({ id: uid(), origin: a.origin, dest: a.dest, trip: a.trip, depart: a.depart, ret: a.ret || null, flex: a.flex, adults: a.adults, children: 0, cabin: a.cabin, max: String(m), cur: a.cur, direct: a.direct, nb: true, nd: false, paused: false });
+    persist(); V = { ...V, tab: 'flights', screen: null, p: {} }; render(); window.scrollTo(0, 0); toast(t('alertCreated'));
+  }
+  if (f === 'gCalc') {
+    readGratForm(); const g = V.form; V.err = []; const cur = CUR[g.country];
+    if (!g.start || !g.end || g.end <= g.start) V.err.push(t('eDates'));
+    const wage = toMinor(g.wage, cur); if (wage === null || wage <= 0n) V.err.push(t('eWage'));
+    const social = g.country === 'BH' ? toMinor(g.social || '0', cur) : 0n; if (social === null) V.err.push(t('eWage'));
+    if (V.err.length) return render();
+    try { g.result = calculateGratuity(g.country, g.start, g.end, wage, social, g.reason); g.step = 2; } catch { V.err.push(t('eDates')); }
+    render(); window.scrollTo(0, 0);
+  }
+});
+render();
+</script>
+
+</body></html>
