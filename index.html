@@ -263,6 +263,73 @@ body.ar .sw input:checked::after { transform: translateX(-20px); }
 .tab.on { color: var(--head); font-weight: 700; }
 .tab.on svg { fill: currentColor; fill-opacity: .15; }
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(100px + env(safe-area-inset-bottom, 0px)); background: #0A3355; color: #fff; padding: 12px 18px; border-radius: 12px; z-index: 20; font-size: 14px; max-width: calc(100% - 32px); }
+/* ---- easy mode: bigger text, bigger targets, one language at a time ---- */
+:root { --muted: #52657A; }
+body { font-size: 17px; line-height: 1.5; }
+.small { font-size: 15px; }
+.btn { min-height: 58px; font-size: 18px; border-radius: 16px; }
+label.field { font-size: 16px; color: var(--fg); gap: 8px; }
+input, select { min-height: 58px; font-size: 18px; border-radius: 14px; }
+.lbl { font-size: 17px; }
+h1 .bi > span:first-child { font-size: 22px; }
+.topbar { padding-block: 16px 12px; }
+.iconbtn { width: 52px; height: 52px; }
+.iconbtn svg { width: 28px; height: 28px; }
+.fab { width: 54px; height: 54px; }
+.fab svg { width: 28px; height: 28px; }
+.chips button { min-height: 48px; font-size: 15px; padding: 0 18px; }
+.seg button { min-height: 50px; font-size: 15px; }
+.pill { font-size: 13.5px; padding: 4px 11px; }
+.banner { font-size: 15px; padding: 14px; }
+.tab { font-size: 13.5px; padding: 10px 0; }
+.tab svg { width: 27px; height: 27px; }
+.tabs .in { grid-template-columns: repeat(4, 1fr); }
+.dcard h3 { font-size: 18px; } .dcard .sub, .meta, .kv { font-size: 15px; }
+.acard .route { font-size: 17px; }
+.menu button { font-size: 17px; padding: 17px 16px; }
+.greet { font-size: 24px; font-weight: 700; }
+.cpill { font-size: 17px; padding: 9px 18px 9px 9px; }
+.cpill .flag.sm { width: 30px; height: 30px; }
+.q { font-size: 26px; font-weight: 800; color: var(--head); line-height: 1.25; }
+.hint { font-size: 16px; color: var(--muted); }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 18px 10px; min-height: 148px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; font-size: 17px; font-weight: 700; color: var(--head); line-height: 1.25; box-shadow: 0 2px 6px rgba(10,51,85,.06); }
+.tile .fdot { width: 66px; height: 66px; }
+.tile .fdot svg { width: 34px; height: 34px; }
+.tile.wide { grid-column: 1 / -1; flex-direction: row; min-height: 96px; justify-content: flex-start; padding-inline: 18px; text-align: start; }
+.clist { display: flex; flex-direction: column; gap: 10px; }
+.crow { display: flex; align-items: center; gap: 16px; width: 100%; min-height: 76px; padding: 10px 16px; background: var(--surface); border: 2px solid var(--line); border-radius: 18px; font-size: 20px; font-weight: 700; color: var(--head); text-align: start; }
+.crow .flag { width: 50px; height: 50px; }
+.crow.on { border-color: var(--btn); background: color-mix(in srgb, var(--btn) 7%, var(--surface)); }
+.crow .ok { margin-inline-start: auto; color: var(--green); width: 28px; height: 28px; }
+.choices { display: flex; flex-direction: column; gap: 10px; }
+.choice { min-height: 58px; border-radius: 16px; border: 2px solid var(--line); background: var(--surface); font-size: 17px; font-weight: 600; text-align: start; padding: 0 16px; display: flex; align-items: center; gap: 12px; }
+.choice.on { border-color: var(--btn); background: color-mix(in srgb, var(--btn) 8%, var(--surface)); }
+.choice .rd { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--muted); flex: none; }
+.choice.on .rd { border: 7px solid var(--btn); }
+.lawhead { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; background: var(--navy); color: #fff; }
+.lawhead .flag { width: 46px; height: 46px; box-shadow: 0 0 0 2px #fff; }
+.lawhead b { display: block; font-size: 19px; }
+.lawhead span { font-size: 15px; opacity: .85; }
+.lawhead .link { color: #fff; text-decoration: underline; font-size: 15px; }
+.gstep { display: flex; gap: 14px; align-items: flex-start; }
+.gstep .n { width: 40px; height: 40px; border-radius: 50%; background: var(--soft); color: var(--head); font-weight: 800; font-size: 18px; display: grid; place-items: center; flex: none; }
+.gstep.done .n { background: var(--green); color: #fff; }
+.gstep b { font-size: 17px; color: var(--head); display: block; }
+.gstep p { font-size: 15.5px; color: var(--muted); margin-top: 2px; }
+.donebtn { margin-top: 10px; min-height: 46px; border-radius: 99px; border: 2px solid var(--green); background: transparent; color: var(--green); font-weight: 700; font-size: 15px; padding: 0 18px; display: inline-flex; align-items: center; gap: 6px; }
+.donebtn svg { width: 18px; height: 18px; }
+.gstep.done .donebtn { background: var(--green); color: #fff; }
+.law { padding: 16px; }
+.law b { font-size: 17px; color: var(--head); }
+.law p { font-size: 16px; margin-top: 6px; }
+.langbig { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.langbig button { min-height: 58px; border-radius: 16px; border: 2px solid rgba(255,255,255,.85); background: rgba(255,255,255,.12); color: #fff; font-size: 19px; font-weight: 700; }
+.langbig button.on { background: #fff; color: #0A3355; }
+.dots i { width: 9px; height: 9px; }
+.pdots { display: flex; gap: 8px; justify-content: center; }
+.pdots i { width: 28px; height: 6px; border-radius: 6px; background: var(--line); }
+.pdots i.on { background: var(--btn); }
 @media (prefers-reduced-motion: no-preference) { .screen { animation: in .18s ease-out; } @keyframes in { from { opacity: .5; transform: translateY(4px); } } }
 </style>
 
@@ -395,7 +462,7 @@ en: {
   gExpired: 'Expired', gSoon: 'Expiring soon', gValid: 'Valid', today: 'Expires today', left1: '1 day left', leftN: '{n} days left', nextExp: 'Next expiry: {name} on {date}',
   docType: 'Document type', docName: 'Name shown in the app', expiry: 'Expiry date', remind: 'Remind me', before: '{n} days before', before1: '1 day before', notes: 'Notes (optional)',
   docPrivacy: 'Only the expiry date is needed. Never enter ID numbers.', save: 'Save', saved: 'Saved', del: 'Delete', cancel: 'Cancel', confirmDel: 'Delete for good?', yesDel: 'Yes, delete',
-  types: { qatar_id: 'Qatar ID', emirates_id: 'Emirates ID', saudi_iqama: 'Saudi Iqama', passport: 'Passport', driving_licence: 'Driving licence', residence_permit: 'Residence permit', rental_contract: 'Rental contract', insurance: 'Insurance', custom: 'Other document' },
+  types: { resid: 'ID card', passport: 'Passport', driving_licence: 'Driving licence', health: 'Health card', rental_contract: 'Rental contract', custom: 'Other document' },
   errName: 'Enter a name.', errExpiry: 'Choose the expiry date.',
   flightsTitle: 'Flight alerts', monitorOff: 'Price monitoring is not connected yet. Your alerts are saved, and no prices are shown until a licensed flight data provider is active.',
   aActive: 'Active', aPaused: 'Paused', aExpired: 'Expired', flEmpty: 'No alerts here', flEmptyT: 'Create an alert for your route and budget.',
@@ -445,7 +512,7 @@ ar: {
   gExpired: 'منتهية', gSoon: 'تنتهي قريبًا', gValid: 'سارية', today: 'تنتهي اليوم', left1: 'يوم واحد متبقٍ', leftN: '{n} يومًا متبقيًا', nextExp: 'الانتهاء التالي: {name} في {date}',
   docType: 'نوع الوثيقة', docName: 'الاسم الظاهر في التطبيق', expiry: 'تاريخ الانتهاء', remind: 'ذكّرني', before: 'قبل {n} يومًا', before1: 'قبل يوم', notes: 'ملاحظات (اختياري)',
   docPrivacy: 'نحتاج فقط إلى تاريخ الانتهاء. لا تُدخل أرقام الهوية.', save: 'حفظ', saved: 'تم الحفظ', del: 'حذف', cancel: 'إلغاء', confirmDel: 'حذف نهائيًا؟', yesDel: 'نعم، احذف',
-  types: { qatar_id: 'البطاقة الشخصية القطرية', emirates_id: 'الهوية الإماراتية', saudi_iqama: 'الإقامة السعودية', passport: 'جواز السفر', driving_licence: 'رخصة القيادة', residence_permit: 'تصريح الإقامة', rental_contract: 'عقد الإيجار', insurance: 'التأمين', custom: 'وثيقة أخرى' },
+  types: { resid: 'بطاقة الإقامة', passport: 'جواز السفر', driving_licence: 'رخصة القيادة', health: 'البطاقة الصحية', rental_contract: 'عقد الإيجار', custom: 'وثيقة أخرى' },
   errName: 'أدخل اسمًا.', errExpiry: 'اختر تاريخ الانتهاء.',
   flightsTitle: 'تنبيهات الرحلات', monitorOff: 'مراقبة الأسعار غير متصلة بعد. تنبيهاتك محفوظة، ولن تظهر أي أسعار حتى يتم تفعيل مزود بيانات رحلات مرخّص.',
   aActive: 'نشط', aPaused: 'متوقف', aExpired: 'منتهٍ', flEmpty: 'لا توجد تنبيهات هنا', flEmptyT: 'أنشئ تنبيهًا لمسارك وميزانيتك.',
@@ -502,6 +569,14 @@ en: {
   guest: 'Guest', guestMail: 'Data saved on this device', tabHome: 'Home', tabFlights: 'Flights', tabDocs: 'Documents', tabProfile: 'Profile',
   next: 'Next', back: 'Back', calc: 'Calculate', save: 'Save', saved: 'Saved', viewAll: 'View all', homeCountry: 'Home country',
   alertCreated: 'Alert created. Price monitoring is not connected yet.', soonMsg: 'Coming soon',
+  pickCountryQ: 'Which country do you live in?', pickCountryHint: 'Each country has its own laws. Everything in the app will follow the country you choose.',
+  nameQ: 'What is your name?', optional: 'optional', homeFromQ: 'Where are you from?', stepOf: 'Step {n} of {t}',
+  tDocs: 'My papers', tFlights: 'Flights home', tGrat: 'End-of-service money', tGuide: 'Guide and laws of {c}',
+  youLiveIn: 'You live in', change: 'Change', lawsOf: 'Laws of {c}', stepsIn: 'First steps in {c}', markDone: 'Mark as done', doneL: 'Done',
+  eosRule: 'End-of-service money', lawCalc: 'Calculate my money', gratFor: 'Calculated with the law of', reasonQ: 'Why did the job end?',
+  nowShowing: 'Now showing {c}', haveAccount: 'I already have an account', guideTitle: 'Guide and laws', gratTitle: 'End-of-service money',
+  docsTitle: 'My papers', tabDocs: 'Papers', nextRem: 'Coming soon to expire', noRem: 'Nothing expiring. Add your papers to get reminders.',
+  docTypeQ: 'Which paper?', basicQ: 'Basic monthly salary', lastQ: 'Last monthly salary',
 },
 ar: {
   tagline2: 'حياتك في الخليج، أبسط.', getStarted: 'ابدأ', logIn: 'تسجيل الدخول', welcomeBack: 'مرحبًا بعودتك', loginSub: 'سجل دخولك إلى حسابك',
@@ -525,6 +600,14 @@ ar: {
   guest: 'ضيف', guestMail: 'البيانات محفوظة على هذا الجهاز', tabHome: 'الرئيسية', tabFlights: 'الرحلات', tabDocs: 'المستندات', tabProfile: 'الملف الشخصي',
   next: 'التالي', back: 'رجوع', calc: 'احسب', save: 'حفظ', saved: 'تم الحفظ', viewAll: 'عرض الكل', homeCountry: 'البلد الأصلي',
   alertCreated: 'تم إنشاء التنبيه. مراقبة الأسعار غير متصلة بعد.', soonMsg: 'قريبًا',
+  pickCountryQ: 'في أي بلد تعيش؟', pickCountryHint: 'لكل بلد قوانينه. كل ما في التطبيق سيتبع البلد الذي تختاره.',
+  nameQ: 'ما اسمك؟', optional: 'اختياري', homeFromQ: 'من أين أنت؟', stepOf: 'الخطوة {n} من {t}',
+  tDocs: 'وثائقي', tFlights: 'رحلات إلى الوطن', tGrat: 'مكافأة نهاية الخدمة', tGuide: 'دليل وقوانين {c}',
+  youLiveIn: 'أنت تعيش في', change: 'تغيير', lawsOf: 'قوانين {c}', stepsIn: 'الخطوات الأولى في {c}', markDone: 'تم', doneL: 'منجز',
+  eosRule: 'مكافأة نهاية الخدمة', lawCalc: 'احسب مكافأتي', gratFor: 'محسوبة حسب قانون', reasonQ: 'لماذا انتهى العمل؟',
+  nowShowing: 'الآن نعرض {c}', haveAccount: 'لدي حساب', guideTitle: 'الدليل والقوانين', gratTitle: 'مكافأة نهاية الخدمة',
+  docsTitle: 'وثائقي', tabDocs: 'الوثائق', nextRem: 'تنتهي قريبًا', noRem: 'لا شيء ينتهي قريبًا. أضف وثائقك لتصلك التذكيرات.',
+  docTypeQ: 'أي وثيقة؟', basicQ: 'الراتب الأساسي الشهري', lastQ: 'آخر راتب شهري',
 } };
 Object.assign(T.en, EXTRA.en); Object.assign(T.ar, EXTRA.ar);
 
@@ -603,11 +686,113 @@ const HOME_AIRPORT = { QA: 'DOH', AE: 'DXB', SA: 'RUH', KW: 'KWI', BH: 'BAH', OM
 const AP_COUNTRY = { DOH: 'QA', DXB: 'AE', AUH: 'AE', SHJ: 'AE', RUH: 'SA', JED: 'SA', DMM: 'SA', KWI: 'KW', BAH: 'BH', MCT: 'OM' };
 const POPULAR = ['TUN', 'CAI', 'BOM', 'MNL', 'COK', 'KHI', 'CMN', 'BEY'];
 
+// ---------- one country = its own rules. Nothing here is shared "Gulf" content. ----------
+// steps: [title, one plain sentence]. law: plain-words summary of the end-of-service rule in RULES.
+const CINFO = {
+  QA: {
+    en: { idName: 'Qatar ID (QID)', health: 'Health card', lawName: 'Qatar Labour Law (Law 14/2004)',
+      steps: [['Work visa and contract', 'Your employer applies. Your contract is registered with the Ministry of Labour.'],
+              ['Medical check and fingerprints', 'Done at the Medical Commission after you arrive.'],
+              ['Qatar ID (QID)', 'Issued by the Ministry of Interior. You can follow it in the Metrash app.'],
+              ['Health card', 'Get it so you can use public clinics and hospitals (HMC and PHCC).'],
+              ['Driving licence', 'From the Traffic Department. Some nationalities can exchange their licence.']],
+      law: 'After at least 1 year of work, you get at least 3 weeks (21 days) of basic salary for every year worked.' },
+    ar: { idName: 'البطاقة الشخصية القطرية', health: 'البطاقة الصحية', lawName: 'قانون العمل القطري (قانون 14/2004)',
+      steps: [['تأشيرة العمل والعقد', 'صاحب العمل يقدّم الطلب، ويُسجَّل عقدك في وزارة العمل.'],
+              ['الفحص الطبي والبصمات', 'في القومسيون الطبي بعد وصولك.'],
+              ['البطاقة الشخصية القطرية', 'تصدرها وزارة الداخلية، ويمكنك متابعتها في تطبيق مطراش.'],
+              ['البطاقة الصحية', 'لتستعمل المراكز الصحية والمستشفيات الحكومية (حمد والرعاية الأولية).'],
+              ['رخصة القيادة', 'من إدارة المرور. بعض الجنسيات يمكنها تبديل رخصتها.']],
+      law: 'بعد سنة عمل على الأقل، تأخذ 3 أسابيع (21 يومًا) من الراتب الأساسي عن كل سنة عمل، كحد أدنى.' } },
+  AE: {
+    en: { idName: 'Emirates ID', health: 'Health insurance', lawName: 'UAE Labour Law (Decree-Law 33/2021)',
+      steps: [['Work permit and entry visa', 'Your employer applies through MOHRE.'],
+              ['Medical fitness test', 'At an approved health centre after you arrive.'],
+              ['Emirates ID and residence visa', 'Issued by ICP (in Dubai: GDRFA). Fingerprints are taken.'],
+              ['Health insurance', 'Health insurance is required. Your employer must arrange it.'],
+              ['Driving licence', 'From the RTA in Dubai or the police traffic department in other emirates.']],
+      law: 'After 1 year: 21 days of basic salary per year for the first 5 years, then 30 days per year. Total maximum: 2 years of salary.' },
+    ar: { idName: 'الهوية الإماراتية', health: 'التأمين الصحي', lawName: 'قانون العمل الإماراتي (مرسوم بقانون 33/2021)',
+      steps: [['تصريح العمل وتأشيرة الدخول', 'صاحب العمل يقدّم الطلب عبر وزارة الموارد البشرية (MOHRE).'],
+              ['فحص اللياقة الطبية', 'في مركز صحي معتمد بعد وصولك.'],
+              ['الهوية الإماراتية والإقامة', 'تصدرها الهيئة الاتحادية للهوية (في دبي: الإقامة وشؤون الأجانب). تؤخذ البصمات.'],
+              ['التأمين الصحي', 'التأمين الصحي إلزامي، وعلى صاحب العمل توفيره.'],
+              ['رخصة القيادة', 'من هيئة الطرق في دبي أو إدارة المرور في باقي الإمارات.']],
+      law: 'بعد سنة: 21 يومًا من الراتب الأساسي عن كل سنة في أول 5 سنوات، ثم 30 يومًا عن كل سنة. الحد الأقصى: راتب سنتين.' } },
+  SA: {
+    en: { idName: 'Iqama (resident ID)', health: 'Health insurance', lawName: 'Saudi Labour Law',
+      steps: [['Work visa and contract', 'Your employer applies. Your contract is documented on Qiwa.'],
+              ['Medical check', 'At an approved medical centre.'],
+              ['Iqama (resident ID)', 'Issued by Jawazat. You follow it in the Absher app.'],
+              ['Health insurance', 'Your employer must give you health insurance.'],
+              ['Driving licence', 'From the Traffic Department (Muroor), booked through Absher.']],
+      law: 'Half a month of your last salary per year for the first 5 years, then a full month per year. If you resign, you get less (1/3 after 2 years, 2/3 after 5 years, all after 10 years).' },
+    ar: { idName: 'الإقامة (هوية مقيم)', health: 'التأمين الصحي', lawName: 'نظام العمل السعودي',
+      steps: [['تأشيرة العمل والعقد', 'صاحب العمل يقدّم الطلب، ويُوثَّق العقد في منصة قوى.'],
+              ['الفحص الطبي', 'في مركز طبي معتمد.'],
+              ['الإقامة (هوية مقيم)', 'تصدرها الجوازات، وتتابعها في تطبيق أبشر.'],
+              ['التأمين الصحي', 'على صاحب العمل أن يوفّر لك تأمينًا صحيًا.'],
+              ['رخصة القيادة', 'من إدارة المرور، والحجز عبر أبشر.']],
+      law: 'نصف راتب آخر شهر عن كل سنة في أول 5 سنوات، ثم راتب شهر كامل عن كل سنة. عند الاستقالة تأخذ أقل (الثلث بعد سنتين، الثلثان بعد 5 سنوات، كاملة بعد 10 سنوات).' } },
+  KW: {
+    en: { idName: 'Civil ID', health: 'Health insurance', lawName: 'Kuwait Labour Law (Law 6/2010)',
+      steps: [['Work permit', 'Your employer applies to the Public Authority for Manpower (PAM).'],
+              ['Medical check and fingerprints', 'Required before your residence is issued.'],
+              ['Residence and Civil ID', 'Residence from the Ministry of Interior, Civil ID card from PACI.'],
+              ['Health insurance', 'A health insurance fee is paid with your residence.'],
+              ['Driving licence', 'From the General Traffic Department. Conditions for expats are strict.']],
+      law: '15 days of basic salary per year for the first 5 years, then a month per year. Maximum: 1.5 years of salary. If you resign, you get less before 10 years.' },
+    ar: { idName: 'البطاقة المدنية', health: 'التأمين الصحي', lawName: 'قانون العمل الكويتي (قانون 6/2010)',
+      steps: [['إذن العمل', 'صاحب العمل يقدّم الطلب إلى الهيئة العامة للقوى العاملة.'],
+              ['الفحص الطبي والبصمات', 'مطلوب قبل إصدار الإقامة.'],
+              ['الإقامة والبطاقة المدنية', 'الإقامة من وزارة الداخلية، والبطاقة المدنية من الهيئة العامة للمعلومات المدنية.'],
+              ['التأمين الصحي', 'تُدفع رسوم الضمان الصحي مع الإقامة.'],
+              ['رخصة القيادة', 'من الإدارة العامة للمرور، وشروطها للوافدين صارمة.']],
+      law: '15 يومًا من الراتب الأساسي عن كل سنة في أول 5 سنوات، ثم راتب شهر عن كل سنة. الحد الأقصى: راتب سنة ونصف. عند الاستقالة قبل 10 سنوات تأخذ أقل.' } },
+  BH: {
+    en: { idName: 'CPR card', health: 'Health insurance', lawName: 'Bahrain Labour Law (Law 36/2012)',
+      steps: [['Work permit', 'Your employer applies to the LMRA.'],
+              ['Medical check', 'At an approved health centre.'],
+              ['CPR card (ID)', 'Issued by the Information & eGovernment Authority (iGA).'],
+              ['Health', 'Check what health cover your employer gives you.'],
+              ['Driving licence', 'From the General Directorate of Traffic.']],
+      law: 'Half a month of salary per year for the first 3 years, then a month per year. Since March 2024 it is paid through social insurance (SIO), not directly by the employer.' },
+    ar: { idName: 'البطاقة السكانية (CPR)', health: 'التأمين الصحي', lawName: 'قانون العمل البحريني (قانون 36/2012)',
+      steps: [['تصريح العمل', 'صاحب العمل يقدّم الطلب إلى هيئة تنظيم سوق العمل.'],
+              ['الفحص الطبي', 'في مركز صحي معتمد.'],
+              ['البطاقة السكانية (CPR)', 'تصدرها هيئة المعلومات والحكومة الإلكترونية.'],
+              ['الصحة', 'تأكد من التغطية الصحية التي يوفرها صاحب العمل.'],
+              ['رخصة القيادة', 'من الإدارة العامة للمرور.']],
+      law: 'نصف راتب شهر عن كل سنة في أول 3 سنوات، ثم راتب شهر عن كل سنة. منذ مارس 2024 تُدفع عبر الهيئة العامة للتأمين الاجتماعي وليس مباشرة من صاحب العمل.' } },
+  OM: {
+    en: { idName: 'Resident card', health: 'Health insurance', lawName: 'Oman Labour Law (Royal Decree 53/2023)',
+      steps: [['Work visa', 'Your employer applies through the Ministry of Labour.'],
+              ['Medical check', 'At an approved medical centre.'],
+              ['Resident card', 'Issued by the Royal Oman Police. Fingerprints are taken.'],
+              ['Health insurance', 'Check what health cover your employer gives you.'],
+              ['Driving licence', 'From the Royal Oman Police.']],
+      law: 'The end-of-service rule for Oman is still being checked. We show nothing rather than a wrong number.' },
+    ar: { idName: 'بطاقة مقيم', health: 'التأمين الصحي', lawName: 'قانون العمل العُماني (مرسوم سلطاني 53/2023)',
+      steps: [['تأشيرة العمل', 'صاحب العمل يقدّم الطلب عبر وزارة العمل.'],
+              ['الفحص الطبي', 'في مركز طبي معتمد.'],
+              ['بطاقة مقيم', 'تصدرها شرطة عُمان السلطانية، وتؤخذ البصمات.'],
+              ['التأمين الصحي', 'تأكد من التغطية الصحية التي يوفرها صاحب العمل.'],
+              ['رخصة القيادة', 'من شرطة عُمان السلطانية.']],
+      law: 'قاعدة مكافأة نهاية الخدمة في عُمان ما زالت قيد المراجعة. لا نعرض رقمًا بدل أن نعرض رقمًا خاطئًا.' } },
+};
+const ci = (k, c = S.country) => CINFO[c][S.lang][k];
+// Document types: the ID card and health card take the name used in the chosen country.
+const DOC_TYPES = ['resid', 'passport', 'driving_licence', 'health', 'rental_contract', 'custom'];
+const typeName = (type, c = S.country) => type === 'resid' ? ci('idName', c) : type === 'health' ? ci('health', c) : t('types')[type] || t('types').custom;
+const OLD_TYPES = { qatar_id: 'resid', emirates_id: 'resid', saudi_iqama: 'resid', residence_permit: 'resid', insurance: 'health' };
+
 // ---------- state (this browser only) ----------
 const KEY = 'expatguard_v1';
 const DEFAULT = { lang: 'en', country: 'QA', home: null, onboarded: false, name: '', email: '', docs: [], alerts: [], guide: {} };
 let S = (() => { try { return { ...DEFAULT, ...JSON.parse(localStorage.getItem(KEY) || '{}') }; } catch { return { ...DEFAULT }; } })();
 const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} };
+S.docs = (S.docs || []).map((d) => (OLD_TYPES[d.type] ? { ...d, type: OLD_TYPES[d.type] } : d));
+if (!CINFO[S.country]) S.country = 'QA';
 let V = { tab: 'home', screen: null, p: {}, pre: 'welcome', form: null, err: [], confirm: false, loginMsg: false };
 
 const t = (k) => T[S.lang][k] ?? T.en[k] ?? k;
@@ -615,10 +800,11 @@ const OL = () => (S.lang === 'ar' ? 'en' : 'ar');
 const t2 = (k) => T[OL()][k] ?? T.en[k] ?? k;
 const fill = (s, o) => s.replace(/\{(\w+)\}/g, (_, k) => o[k] ?? '');
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
-const biS = (a, b, cls = '') => `<span class="bi ${cls}"><span>${a}</span><span class="alt" lang="${OL()}"><bdi>${b}</bdi></span></span>`;
-const bi = (k, cls = '') => biS(t(k), t2(k), cls);
-const inlS = (a, b) => `<span class="inl">${a} <span class="sl">/</span> <bdi class="alt-i" lang="${OL()}">${b}</bdi></span>`;
-const inl = (k) => inlS(t(k), t2(k));
+// Easy mode: show only the language the person chose (no stacked second language).
+const biS = (a, b, cls = '') => `<span class="bi ${cls}"><span>${a}</span></span>`;
+const bi = (k, cls = '') => biS(t(k), '', cls);
+const inlS = (a) => `<span class="inl">${a}</span>`;
+const inl = (k) => inlS(t(k));
 const cname = (c) => t('countries')[c], cname2 = (c) => t2('countries')[c];
 const todayISO = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
 const daysLeft = (iso) => Math.round((Date.parse(iso) - Date.parse(todayISO())) / 86400000);
@@ -630,9 +816,9 @@ const uid = () => (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) 
 const initials = () => (S.name || t('guest')).trim().slice(0, 1).toUpperCase();
 function toast(msg) { const el = document.getElementById('toast'); el.textContent = msg; el.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => (el.hidden = true), 2600); }
 
-const DOC_STYLE = { qatar_id: ['idcard', 'var(--green)'], emirates_id: ['idcard', 'var(--green)'], saudi_iqama: ['idcard', 'var(--green)'], passport: ['doc', 'var(--indigo)'], driving_licence: ['idcard', 'var(--purple)'], residence_permit: ['idcard', 'var(--blue)'], rental_contract: ['doc', 'var(--green)'], insurance: ['doc', 'var(--blue)'], custom: ['doc', 'var(--amber)'] };
-const TYPE_COUNTRY = { qatar_id: 'QA', emirates_id: 'AE', saudi_iqama: 'SA' };
-const docCountry = (d) => d.country || TYPE_COUNTRY[d.type] || S.country;
+const DOC_STYLE = { resid: ['idcard', 'var(--green)'], passport: ['doc', 'var(--indigo)'], driving_licence: ['idcard', 'var(--purple)'], health: ['doc', 'var(--red)'], rental_contract: ['doc', 'var(--blue)'], custom: ['doc', 'var(--amber)'] };
+const docCountry = (d) => d.country || S.country;
+const docLabel = (d) => (d.type === 'custom' ? d.name : typeName(d.type, docCountry(d)));
 function docStatus(d) { const n = daysLeft(d.expiry); return n < 0 ? 'expired' : n <= 30 ? 'soon' : 'valid'; }
 function docPill(d) {
   const n = daysLeft(d.expiry); const s = docStatus(d);
@@ -649,36 +835,46 @@ const errs = () => V.err.map((e) => `<p class="err-text">${e}</p>`).join('');
 // ---------- pre-app screens ----------
 function welcome() {
   return `<section class="welcome">${skyline()}
-  <div class="wtop pad">${langSw()}</div>
-  <div class="wbrand pad">${brand('lg')}<p class="wtag">${biS(t('tagline2'), t2('tagline2'))}</p></div>
-  <div class="wbottom pad"><button class="btn ghost" data-a="pre" data-v="setup">${inl('getStarted')}</button><button class="btn ghost" data-a="pre" data-v="login">${inl('logIn')}</button><div class="dots"><i class="on"></i><i></i><i></i></div></div></section>`;
+  <div class="wbrand pad">${brand('lg')}<p class="wtag">${t('tagline2')}</p></div>
+  <div class="wbottom pad"><p style="font-size:17px;font-weight:600">${t('chooseLang')} / ${t2('chooseLang')}</p>
+    <div class="langbig"><button class="${S.lang === 'en' ? 'on' : ''}" data-a="setLang" data-v="en">English</button><button class="${S.lang === 'ar' ? 'on' : ''}" data-a="setLang" data-v="ar" lang="ar">العربية</button></div>
+    <button class="btn" style="background:#fff;color:#0A3355" data-a="pre" data-v="country">${t('getStarted')}</button>
+    <button class="link" style="color:#fff;font-size:16px" data-a="pre" data-v="login">${t('haveAccount')}</button></div></section>`;
 }
+const countryList = (action) => `<div class="clist">${GCC.map(([c]) => `<button class="crow ${S.country === c ? 'on' : ''}" data-a="${action}" data-v="${c}">${flag(c)}<span class="grow">${cname(c)}</span>${S.country === c ? ic('check', 'ok') : ''}</button>`).join('')}</div>`;
 function login() {
   return `<section class="pre pad screen"><div><button class="iconbtn" data-a="pre" data-v="welcome" aria-label="${t('back')}">${ic('back', 'flip')}</button></div>
   <div class="stack" style="align-items:center;text-align:center;gap:10px">${brand()}<h2 style="margin-top:14px">${bi('welcomeBack')}</h2><p class="muted small">${bi('loginSub')}</p></div>
   <form class="stack" data-f="login" novalidate>
-    <label class="inp">${ic('mail')}<input id="l-email" type="email" autocomplete="email" placeholder="${t('email')} / ${t2('email')}"></label>
-    <label class="inp">${ic('lock')}<input id="l-pass" type="password" autocomplete="current-password" placeholder="${t('password')} / ${t2('password')}">${ic('eye')}</label>
+    <label class="inp">${ic('mail')}<input id="l-email" type="email" autocomplete="email" placeholder="${t('email')}"></label>
+    <label class="inp">${ic('lock')}<input id="l-pass" type="password" autocomplete="current-password" placeholder="${t('password')}">${ic('eye')}</label>
     <div style="text-align:end"><button type="button" class="link" data-a="soon">${inl('forgot')}</button></div>
     ${V.loginMsg ? banner(t('acctSoon')) : ''}
     <button class="btn" type="submit">${inl('logIn')}</button>
   </form>
-  <div class="or">${t('or')} / ${t2('or')}</div>
+  <div class="or">${t('or')}</div>
   <button class="btn social" data-a="soon"><span class="gmark">G</span>${t('google')}</button>
   <button class="btn social" data-a="soon">${t('apple')}</button>
-  <button class="btn alt" data-a="pre" data-v="setup">${inl('continueGuest')}</button>
-  <p class="center small muted">${t('noAccount')} <button class="link" data-a="pre" data-v="setup">${inl('signUp')}</button></p>
+  <button class="btn alt" data-a="pre" data-v="country">${inl('continueGuest')}</button>
+  <p class="center small muted">${t('noAccount')} <button class="link" data-a="pre" data-v="country">${inl('signUp')}</button></p>
   <div class="center">${langSw('boxed')}</div></section>`;
 }
+function preTop(back, n) {
+  return `<div class="row"><button class="iconbtn" data-a="pre" data-v="${back}" aria-label="${t('back')}">${ic('back', 'flip')}</button><span class="grow small muted center">${fill(t('stepOf'), { n, t: 2 })}</span><span style="width:52px"></span></div>
+  <div class="pdots"><i class="on"></i><i class="${n > 1 ? 'on' : ''}"></i></div>`;
+}
+function countryStep() {
+  return `<section class="pre pad screen">${preTop('welcome', 1)}
+  <h2 class="q">${t('pickCountryQ')}</h2><p class="hint">${t('pickCountryHint')}</p>
+  ${countryList('setupCountry')}</section>`;
+}
 function setup() {
-  return `<section class="pre pad screen"><div class="row"><button class="iconbtn" data-a="pre" data-v="welcome" aria-label="${t('back')}">${ic('back', 'flip')}</button><span class="grow"></span>${langSw('boxed')}</div>
-  ${brand()}<h2>${bi('setupT')}</h2>
-  <label class="field">${inl('yourName')}<input id="s-name" maxlength="40" value="${esc(S.name)}" autocomplete="given-name"></label>
-  <div class="lbl">${inl('whereLive')}</div>
-  <div class="grid2">${GCC.map(([c]) => `<button class="ccard ${S.country === c ? 'on' : ''}" data-a="setupCountry" data-v="${c}">${flag(c)}${biS(cname(c), cname2(c))}</button>`).join('')}</div>
-  <label class="field">${inl('homeCountry')}<select id="s-home"><option value="">${t('notSet')}</option>${Object.entries(t('hcountries')).map(([c, n]) => `<option value="${c}" ${S.home === c ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
-  <p class="muted small">${t('readyS')}</p>
-  <button class="btn" data-a="finishSetup">${inl('start')}</button></section>`;
+  return `<section class="pre pad screen">${preTop('country', 2)}
+  <div class="lawhead">${flag(S.country)}<div class="grow"><span>${t('youLiveIn')}</span><b>${cname(S.country)}</b></div><button class="link" data-a="pre" data-v="country">${t('change')}</button></div>
+  <label class="field"><span class="q" style="font-size:22px">${t('nameQ')}</span><span class="hint">${t('optional')}</span><input id="s-name" maxlength="40" value="${esc(S.name)}" autocomplete="given-name"></label>
+  <label class="field"><span class="q" style="font-size:22px">${t('homeFromQ')}</span><span class="hint">${t('optional')} · ${t('homeWhy')}</span><select id="s-home"><option value="">${t('notSet')}</option>${Object.entries(t('hcountries')).map(([c, n]) => `<option value="${c}" ${S.home === c ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+  <p class="hint">${t('readyS')}</p>
+  <button class="btn" data-a="finishSetup">${t('start')}</button></section>`;
 }
 
 // ---------- main screens ----------
@@ -687,8 +883,9 @@ function fcard(icon, color, titleK, descK, btnK, headA, headV, btnA, btnV) {
 }
 function reminderRow(d) {
   const [i] = DOC_STYLE[d.type] || DOC_STYLE.custom; const n = daysLeft(d.expiry);
-  return `<button class="card rem" data-a="go" data-v="docForm" data-id="${d.id}"><span class="sq" style="--c:var(--amber)">${ic(i)}</span><span class="grow"><b style="font-size:13.5px">${esc(d.name)}</b><span class="small muted" style="display:block">${t('types')[d.type]} · ${cname(docCountry(d))}</span></span><span class="small num">${fmtDate(d.expiry)}</span><span class="pill ${n <= 30 ? 'err' : 'warn'} num">${fill(t('inDays'), { n })}</span></button>`;
+  return `<button class="card rem" data-a="go" data-v="docForm" data-id="${d.id}"><span class="sq" style="--c:var(--amber)">${ic(i)}</span><span class="grow"><b style="font-size:17px">${esc(docLabel(d))}</b><span class="small muted" style="display:block">${fmtDate(d.expiry)}</span></span><span class="pill ${n <= 30 ? 'err' : 'warn'} num">${fill(t('inDays'), { n })}</span></button>`;
 }
+const tile = (icon, color, label, a, v, wide = '') => `<button class="tile ${wide}" data-a="${a}" data-v="${v}"><span class="fdot" style="--c:${color}">${ic(icon)}</span><span>${label}</span></button>`;
 function home() {
   const h = new Date().getHours();
   const gk = h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening';
@@ -696,17 +893,19 @@ function home() {
   const rems = [...S.docs].filter((d) => daysLeft(d.expiry) >= 0).sort((a, b) => a.expiry.localeCompare(b.expiry)).slice(0, 3);
   return `<div class="screen">
   <div class="hhead pad">${skyline()}
-    <div class="row" style="align-items:flex-start"><div class="greet grow"><div>${t(gk)}${nm}</div><div class="alt" lang="${OL()}"><bdi>${t2(gk)}${nm}</bdi></div></div>
-      <button class="iconbtn" data-a="go" data-v="notifications" aria-label="${t('notifTitle')}">${ic('bell')}</button><button class="avatar" data-a="tab" data-v="profile" aria-label="${t('profile')}">${initials()}</button></div>
-    <div style="margin-top:16px"><button class="cpill" data-a="go" data-v="countrySel">${flag(S.country, 'sm')}${city(HOME_AIRPORT[S.country])}, ${cname(S.country)}${ic('down')}</button></div>
+    <div class="row" style="align-items:flex-start"><div class="greet grow">${t(gk)}${nm}</div>
+      <button class="avatar" data-a="tab" data-v="profile" aria-label="${t('profile')}">${initials()}</button></div>
+    <div style="margin-top:16px"><button class="cpill" data-a="go" data-v="countrySel">${flag(S.country, 'sm')}${cname(S.country)}<span class="small" style="opacity:.7;font-weight:500">· ${t('change')}</span></button></div>
   </div>
   <div class="sheet pad stack">
-    ${fcard('flight', 'var(--blue)', 'flightsCard', 'flightsCardT', 'createAlertShort', 'tab', 'flights', 'go', 'newAlert')}
-    ${fcard('doc', 'var(--green)', 'docsCard', 'docsCardT', 'viewDocs', 'tab', 'docs', 'tab', 'docs')}
-    ${fcard('calc', 'var(--blue)', 'gratCard', 'gratCardT', 'calcNow', 'go', 'gratuity', 'go', 'gratuity')}
-    ${fcard('list', 'var(--amber)', 'guideCard', 'guideCardT', 'openGuide', 'go', 'guide', 'go', 'guide')}
-    <div class="sect"><span>${inl('nextRem')}</span><button class="link" data-a="tab" data-v="docs">${inl('viewAll')}</button></div>
-    ${rems.length ? rems.map(reminderRow).join('') : `<div class="card small muted">${t('noRem')}</div>`}
+    <div class="tiles">
+      ${tile('idcard', 'var(--green)', t('tDocs'), 'tab', 'docs')}
+      ${tile('flight', 'var(--blue)', t('tFlights'), 'tab', 'flights')}
+      ${tile('calc', 'var(--indigo)', t('tGrat'), 'go', 'gratuity')}
+      ${tile('list', 'var(--amber)', fill(t('tGuide'), { c: cname(S.country) }), 'go', 'guide')}
+    </div>
+    <div class="sect" style="font-size:18px"><span>${t('nextRem')}</span>${rems.length ? `<button class="link" style="font-size:15px" data-a="tab" data-v="docs">${t('viewAll')}</button>` : ''}</div>
+    ${rems.length ? rems.map(reminderRow).join('') : `<div class="card hint">${t('noRem')}</div>`}
   </div></div>`;
 }
 
@@ -717,7 +916,6 @@ function alertCard(a) {
   const arrow = (S.lang === 'ar') ? '←' : '→', arrow2 = (S.lang === 'ar') ? '→' : '←';
   return `<button class="card acard" data-a="go" data-v="alertDetail" data-id="${a.id}">${flag(AP_COUNTRY[a.origin])}<span class="grow">
     <span class="row"><span class="route grow">${city(a.origin)} ${arrow} ${city(a.dest)}</span>${pill}</span>
-    <bdi class="alt" lang="${OL()}">${city2(a.origin)} ${arrow2} ${city2(a.dest)}</bdi>
     <span class="meta">${ic('clock')}<span class="num">${fmtDate(a.depart)}${a.ret ? ' – ' + fmtDate(a.ret) : ''}</span></span>
     <span class="kv" style="display:block;margin-top:4px">${t('maxL')}: <b class="num">${formatMinor(a.max, a.cur)}</b></span>
     <span class="kv" style="display:block">${t('lastPrice')}: ${t('notYet')}</span></span>${ic('dots', 'muted')}</button>`;
@@ -731,7 +929,7 @@ function flights() {
     body = list.length ? list.map(alertCard).join('') : empty('bell', t('flEmpty'), t('flEmptyT'), `<button class="btn" data-a="go" data-v="newAlert">${inl('createBtn')}</button>`);
   } else {
     const o = HOME_AIRPORT[S.country];
-    body = `<p class="muted small">${t('popularT')}</p>` + POPULAR.map((d) => `<button class="card acard" data-a="quickAlert" data-v="${d}">${flag(S.country)}<span class="grow"><span class="route">${city(o)} ${S.lang === 'ar' ? '←' : '→'} ${city(d)}</span><bdi class="alt" lang="${OL()}">${city2(o)} – ${city2(d)}</bdi></span><span class="pill ok">${inlS(t('createAlertShort'), t2('createAlertShort'))}</span></button>`).join('');
+    body = `<p class="muted small">${t('popularT')}</p>` + POPULAR.map((d) => `<button class="card acard" data-a="quickAlert" data-v="${d}">${flag(S.country)}<span class="grow"><span class="route">${city(o)} ${S.lang === 'ar' ? '←' : '→'} ${city(d)}</span></span><span class="pill ok">${inlS(t('createAlertShort'), t2('createAlertShort'))}</span></button>`).join('');
   }
   return `<div class="screen">${topbar('flightsTitle', fab('newAlert', 'createAlert'))}<div class="pad stack">${seg}${banner(t('monitorOff'))}${body}</div></div>`;
 }
@@ -748,7 +946,7 @@ function newAlert(prefill) {
     <div class="grid2"><label class="field">${inl('depart')}<input id="a-depart" type="date" value="${f.depart || ''}" min="${todayISO()}"></label>
     ${f.trip === 'round' ? `<label class="field">${inl('ret')}<input id="a-ret" type="date" value="${f.ret || ''}" min="${todayISO()}"></label>` : '<span></span>'}</div>
     <div class="grid2"><label class="field">${inl('passengers')}<span class="stepper"><b class="num">${f.adults}</b><button type="button" data-a="count" data-v="-1" ${f.adults <= 1 ? 'disabled' : ''} aria-label="−">−</button><button type="button" data-a="count" data-v="1" ${f.adults >= 9 ? 'disabled' : ''} aria-label="+">+</button></span></label>
-    <label class="field">${inl('cabin')}<select id="a-cabin">${Object.keys(T.en.cabins).map((k) => `<option value="${k}" ${f.cabin === k ? 'selected' : ''}>${t('cabins')[k]} / ${t2('cabins')[k]}</option>`).join('')}</select></label></div>
+    <label class="field">${inl('cabin')}<select id="a-cabin">${Object.keys(T.en.cabins).map((k) => `<option value="${k}" ${f.cabin === k ? 'selected' : ''}>${t('cabins')[k]}</option>`).join('')}</select></label></div>
     <label class="field">${inl('maxPrice')}<span class="row"><input id="a-price" inputmode="decimal" value="${esc(f.price)}" placeholder="1,200" style="flex:2"><select id="a-cur" style="flex:1">${GCC.map(([, c]) => `<option ${f.cur === c ? 'selected' : ''}>${c}</option>`).join('')}</select></span></label>
     <label class="sw"><span class="tick">${ic('check')}</span><span class="grow">${inl('direct')}</span><input type="checkbox" id="a-direct" role="switch" ${f.direct ? 'checked' : ''}></label>
     <label class="sw"><span class="tick">${ic('check')}</span><span class="grow">${inl('flexDates')}</span><input type="checkbox" id="a-flexd" role="switch" ${f.flex ? 'checked' : ''}></label>
@@ -768,73 +966,74 @@ function alertDetail() {
 
 function docCard(d) {
   const [i, c] = DOC_STYLE[d.type] || DOC_STYLE.custom; const s = docStatus(d);
-  return `<button class="card dcard" data-a="go" data-v="docForm" data-id="${d.id}"><span class="dicon" style="--c:${c}">${ic(i)}</span><span class="grow"><span class="row" style="align-items:flex-start"><h3 class="grow">${esc(d.name)}</h3>${ic('dots', 'muted')}</span><span class="sub">${t('types')[d.type]} · ${cname(docCountry(d))}</span>
-    <span class="row" style="margin-top:8px"><span class="meta grow ${s !== 'valid' ? 'date-red' : ''}" style="margin:0">${ic('cal')}<span class="num">${fmtDate(d.expiry)}</span></span>${docPill(d)}</span></span></button>`;
+  return `<button class="card dcard" data-a="go" data-v="docForm" data-id="${d.id}"><span class="dicon" style="--c:${c}">${ic(i)}</span><span class="grow"><h3>${esc(docLabel(d))}</h3>
+    <span class="row" style="margin-top:6px"><span class="meta grow ${s !== 'valid' ? 'date-red' : ''}" style="margin:0">${ic('cal')}<span class="num">${fmtDate(d.expiry)}</span></span>${docPill(d)}</span></span></button>`;
 }
 function documents() {
-  const dc = V.p.dc || 'all';
-  const docs = [...S.docs].filter((d) => dc === 'all' || docCountry(d) === dc).sort((a, b) => a.expiry.localeCompare(b.expiry));
-  const chips = `<div class="chips"><button class="${dc === 'all' ? 'on' : ''}" data-a="dc" data-v="all">${biS(t('all'), t2('all'))}</button>${GCC.map(([c]) => `<button class="${dc === c ? 'on' : ''}" data-a="dc" data-v="${c}">${biS(cname(c), cname2(c))}</button>`).join('')}</div>`;
-  return `<div class="screen">${topbar('docsTitle', fab('docForm', 'docAdd'))}<div class="pad stack">${chips}
-    ${docs.length ? docs.map(docCard).join('') : empty('doc', t('docEmpty'), t('docEmptyT'), `<button class="btn" data-a="go" data-v="docForm">${inl('docAdd')}</button>`)}
+  const docs = [...S.docs].sort((a, b) => a.expiry.localeCompare(b.expiry));
+  return `<div class="screen">${topbar('docsTitle', fab('docForm', 'docAdd'))}<div class="pad stack">
+    ${docs.length ? docs.map(docCard).join('') + `<button class="btn" data-a="go" data-v="docForm">${ic('plus')}${t('docAdd')}</button>` : empty('idcard', t('docEmpty'), t('docEmptyT'), `<button class="btn" data-a="go" data-v="docForm">${ic('plus')}${t('docAdd')}</button>`)}
   </div></div>`;
 }
 function docForm() {
-  const f = V.form; const types = t('types');
+  const f = V.form;
   return `<div class="screen">${topbar(f.id ? 'docEdit' : 'docAdd')}
   <form class="pad stack" data-f="saveDoc" novalidate style="padding-bottom:20px">
-    ${banner(t('docPrivacy'), 'lock')}
-    <label class="field">${t('docType')}<select id="d-type" data-c="docType">${Object.entries(types).map(([k, v]) => `<option value="${k}" ${f.type === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
-    <label class="field">${t('docName')}<input id="d-name" maxlength="80" value="${esc(f.name)}"></label>
-    <label class="field">${t('residence')}<select id="d-country">${GCC.map(([c]) => `<option value="${c}" ${f.country === c ? 'selected' : ''}>${cname(c)}</option>`).join('')}</select></label>
+    <div class="lbl">${t('docTypeQ')}</div>
+    <div class="choices">${DOC_TYPES.map((k) => `<button type="button" class="choice ${f.type === k ? 'on' : ''}" data-a="docType" data-v="${k}"><span class="rd"></span>${typeName(k, f.country)}</button>`).join('')}</div>
+    ${f.type === 'custom' ? `<label class="field">${t('docName')}<input id="d-name" maxlength="80" value="${esc(f.name)}"></label>` : `<input id="d-name" type="hidden" value="${esc(f.name)}">`}
     <label class="field">${t('expiry')}<input id="d-exp" type="date" value="${f.expiry || ''}" min="2000-01-01" max="2100-12-31"></label>
-    <div class="lbl">${t('remind')}</div><div class="chips wrap">${[90, 60, 30, 14, 7, 1].map((n) => `<button type="button" class="${f.offsets.includes(n) ? 'on' : ''}" data-a="toggleOffset" data-v="${n}">${n === 1 ? t('before1') : fill(t('before'), { n })}</button>`).join('')}</div>
-    <label class="field">${t('notes')}<input id="d-notes" maxlength="200" value="${esc(f.notes)}"></label>
+    <div class="lbl">${t('remind')}</div><div class="chips wrap">${[90, 30, 7, 1].map((n) => `<button type="button" class="${f.offsets.includes(n) ? 'on' : ''}" data-a="toggleOffset" data-v="${n}">${n === 1 ? t('before1') : fill(t('before'), { n })}</button>`).join('')}</div>
+    ${banner(t('docPrivacy'), 'lock')}
     ${errs()}
-    <button class="btn" type="submit">${inl('save')}</button>
+    <button class="btn" type="submit">${t('save')}</button>
     ${f.id ? (V.confirm ? `<div class="card confirm stack"><h3>${t('confirmDel')}</h3><div class="grid2"><button type="button" class="btn alt" data-a="cancelDel">${t('cancel')}</button><button type="button" class="btn danger" data-a="delDoc">${t('yesDel')}</button></div></div>` : `<button type="button" class="btn danger" data-a="askDel">${t('del')}</button>`) : ''}
   </form></div>`;
 }
 
+function lawHead(c, k) {
+  return `<div class="lawhead">${flag(c)}<div class="grow"><span>${fill(t(k), { c: cname(c) })}</span><b>${cname(c)}</b></div><button class="link" data-a="go" data-v="countrySel">${t('change')}</button></div>`;
+}
 function gratuity() {
   const g = V.form; const step = g.step;
-  const stepper = `<div class="steps">${['sCountry', 'sJob', 'sResult'].map((k, i) => `<div class="${i <= step ? 'on' : ''}"><b>${i + 1}</b>${biS(t(k), t2(k))}</div>`).join('')}</div>`;
   let body = '';
-  if (step === 0) body = `<div class="lbl">${inl('selCountry')}</div><div class="grid2">${GCC.map(([c]) => `<button class="ccard ${g.country === c ? 'on' : ''}" data-a="gCountry" data-v="${c}">${flag(c)}${biS(cname(c), cname2(c))}</button>`).join('')}</div><button class="btn" data-a="gStep" data-v="1" style="margin-top:8px">${inl('next')}</button><div class="band">${skyline()}</div>`;
-  if (step === 1) {
+  if (step !== 2) {
     const cur = CUR[g.country];
-    body = `<form class="stack" data-f="gCalc" novalidate><div class="row">${flag(g.country)}<b>${cname(g.country)}</b></div>
-      <div class="grid2"><label class="field">${t('startD')}<input id="g-start" type="date" value="${g.start || ''}" min="1980-01-01"></label>
-      <label class="field">${t('endD')}<input id="g-end" type="date" value="${g.end || ''}"></label></div>
-      <label class="field">${g.country === 'SA' ? t('last') : t('basic')} (${cur})<input id="g-wage" inputmode="decimal" value="${esc(g.wage)}"></label>
-      ${g.country === 'BH' ? `<label class="field">${t('social')} (${cur})<input id="g-social" inputmode="decimal" value="${esc(g.social)}"></label>` : ''}
-      <p class="muted small">${t('salaryNote')}</p>
-      <label class="field">${t('reason')}<select id="g-reason">${[['termination', 'rTerm'], ['contract_end', 'rEnd'], ['resignation', 'rResign']].map(([k, l]) => `<option value="${k}" ${g.reason === k ? 'selected' : ''}>${t(l)}</option>`).join('')}</select></label>
+    body = RULES[g.country].status === 'unavailable' ? `${lawHead(g.country, 'gratFor')}${empty('calc', t('unavailT'), t('unavailM'))}` :
+    `<form class="stack" data-f="gCalc" novalidate>${lawHead(g.country, 'gratFor')}
+      <label class="field">${t('startD')}<input id="g-start" type="date" value="${g.start || ''}" min="1980-01-01"></label>
+      <label class="field">${t('endD')}<input id="g-end" type="date" value="${g.end || ''}"></label>
+      <label class="field">${g.country === 'SA' ? t('lastQ') : t('basicQ')} (${cur})<input id="g-wage" inputmode="decimal" value="${esc(g.wage)}" placeholder="0"></label>
+      ${g.country === 'BH' ? `<label class="field">${t('social')} (${cur})<input id="g-social" inputmode="decimal" value="${esc(g.social)}" placeholder="0"></label>` : ''}
+      <p class="hint">${ic('lock')} ${t('salaryNote')}</p>
+      <div class="lbl">${t('reasonQ')}</div>
+      <div class="choices">${[['termination', 'rTerm'], ['contract_end', 'rEnd'], ['resignation', 'rResign']].map(([k, l]) => `<button type="button" class="choice ${g.reason === k ? 'on' : ''}" data-a="gReason" data-v="${k}"><span class="rd"></span>${t(l)}</button>`).join('')}</div>
       ${errs()}
-      <div class="grid2"><button type="button" class="btn alt" data-a="gStep" data-v="0">${inl('back')}</button><button class="btn" type="submit">${inl('calc')}</button></div></form>`;
-  }
-  if (step === 2) {
+      <button class="btn" type="submit">${ic('calc')}${t('calc')}</button></form>`;
+  } else {
     const r = g.result;
-    if (!r.available) body = `${empty('calc', t('unavailT'), r.reason === 'resignation_unconfirmed' ? t('resignU') : t('unavailM'))}<button class="btn alt" data-a="gStep" data-v="${r.reason === 'rule_unavailable' ? 0 : 1}">${inl('back')}</button>`;
-    else body = `${r.confirmed ? '' : banner(t('toConfirm'))}
-      <div class="card result stack" style="gap:6px;padding:22px"><span class="muted">${inl('estimated')}</span><span class="bigamount num">${r.eligible ? formatMinor(r.amount, r.currency) : t('notElig')}</span><span class="muted small">${fill(t('service'), { y: r.years, d: r.days })}</span></div>
+    if (!r.available) body = `${lawHead(g.country, 'gratFor')}${empty('calc', t('unavailT'), r.reason === 'resignation_unconfirmed' ? t('resignU') : t('unavailM'))}<button class="btn alt" data-a="gStep" data-v="1">${t('back')}</button>`;
+    else body = `${lawHead(g.country, 'gratFor')}
+      <div class="card result stack" style="gap:6px;padding:24px"><span class="muted">${t('estimated')}</span><span class="bigamount num">${r.eligible ? formatMinor(r.amount, r.currency) : t('notElig')}</span><span class="muted small">${fill(t('service'), { y: r.years, d: r.days })}</span></div>
+      ${r.confirmed ? '' : banner(t('toConfirm'))}
       <div class="lbl">${t('how')}</div><div class="card stack" style="gap:8px">${r.steps.map(([k, p]) => `<div class="row small num" style="align-items:flex-start"><span style="color:var(--green)">✓</span><span class="grow">${fill(t('st')[k], p)}</span></div>`).join('')}</div>
       ${r.warnings.map((w) => banner(t(w === 'sio' ? 'wSio' : 'wBefore'))).join('')}
-      <div class="lbl">${t('legal')}</div><p class="small">${r.ref}</p><a class="link" href="${r.src}" target="_blank" rel="noopener">${t('source')} ↗</a>
-      <p class="muted small">${t('disclaimer')}</p><button class="btn alt" data-a="gStep" data-v="1">${t('edit')}</button>`;
+      <div class="lbl">${t('legal')}</div><p class="small">${ci('lawName', g.country)}${(r.ref.match(/arts?\. .*$/) || [''])[0] ? ' · ' + r.ref.match(/arts?\. .*$/)[0] : ''}</p><a class="link" style="font-size:15px" href="${r.src}" target="_blank" rel="noopener">${t('source')} ↗</a>
+      <p class="hint">${t('disclaimer')}</p><button class="btn alt" data-a="gStep" data-v="1">${t('edit')}</button>`;
   }
-  return `<div class="screen">${topbar('gratTitle')}<div class="pad stack" style="padding-bottom:16px">${stepper}${body}</div></div>`;
+  return `<div class="screen">${topbar('gratTitle')}<div class="pad stack" style="padding-bottom:16px">${body}</div></div>`;
 }
 
 function guide() {
-  if (!V.p.country) {
-    return `<div class="screen">${topbar('guideTitle')}<div class="pad stack"><p class="muted small">${t('guideIntro')}</p>
-      ${GCC.map(([c]) => { const done = (S.guide[c] || []).length; return `<button class="card acard" data-a="guideCountry" data-v="${c}">${flag(c)}<span class="grow">${biS(cname(c), cname2(c))}<span class="small muted">${fill(t('progress'), { d: done, t: 5 })}</span></span>${ic('chev', 'flip muted')}</button>`; }).join('')}</div></div>`;
-  }
-  const c = V.p.country, done = S.guide[c] || [];
-  return `<div class="screen">${topbar('guideTitle')}<div class="pad stack"><div class="row">${flag(c)}<b>${cname(c)}</b></div>
-    <span class="small">${fill(t('progress'), { d: done.length, t: 5 })}</span><div class="bar"><i style="width:${done.length * 20}%"></i></div>
-    ${t('guideSteps').map((s, i) => `<label class="card check"><input type="checkbox" data-c="guideTick" data-v="${i}" ${done.includes(i) ? 'checked' : ''}><span class="grow"><b>${i + 1}. ${s}</b></span></label>`).join('')}
+  const c = S.country, done = S.guide[c] || [], steps = ci('steps');
+  return `<div class="screen">${topbar('guideTitle')}<div class="pad stack">
+    <div class="lawhead">${flag(c)}<div class="grow"><b>${cname(c)}</b></div><button class="link" data-a="go" data-v="countrySel">${t('change')}</button></div>
+    <div class="lbl" style="font-size:19px;margin-top:8px">${fill(t('stepsIn'), { c: cname(c) })}</div>
+    <span class="small">${fill(t('progress'), { d: done.length, t: steps.length })}</span><div class="bar"><i style="width:${done.length / steps.length * 100}%"></i></div>
+    ${steps.map(([title, line], i) => { const on = done.includes(i); return `<div class="card gstep ${on ? 'done' : ''}"><span class="n">${on ? ic('check') : i + 1}</span><div class="grow"><b>${title}</b><p>${line}</p><button class="donebtn" data-a="guideTick" data-v="${i}">${ic('check')}${on ? t('doneL') : t('markDone')}</button></div></div>`; }).join('')}
+    <div class="lbl" style="font-size:19px;margin-top:12px">${fill(t('lawsOf'), { c: cname(c) })}</div>
+    <div class="card law"><b>${t('eosRule')}</b><p>${ci('law')}</p><p class="small muted">${ci('lawName')}</p>
+      ${RULES[c].status !== 'unavailable' ? `<button class="btn" style="margin-top:12px" data-a="go" data-v="gratuity">${ic('calc')}${t('lawCalc')}</button>` : ''}</div>
     ${banner(t('guideVerify'))}</div></div>`;
 }
 function notifications() { return `<div class="screen">${topbar('notifTitle')}<div class="pad stack">${empty('bell', t('notifEmpty'), t('notifEmptyT'))}</div></div>`; }
@@ -855,7 +1054,7 @@ function personal() {
     <p class="muted small">${t('guestHint')}</p><button class="btn" type="submit">${inl('save')}</button></form></div>`;
 }
 function countrySel() {
-  return `<div class="screen">${topbar('countryCur')}<div class="pad stack"><div class="lbl">${inl('whereLive')}</div><div class="grid2">${GCC.map(([c, cur]) => `<button class="ccard ${S.country === c ? 'on' : ''}" data-a="pickCountry" data-v="${c}">${flag(c)}<span class="grow">${biS(cname(c), cname2(c))}<span class="small muted">${cur}</span></span></button>`).join('')}</div></div></div>`;
+  return `<div class="screen">${topbar('countryCur')}<div class="pad stack"><h2 class="q">${t('pickCountryQ')}</h2><p class="hint">${t('pickCountryHint')}</p>${countryList('pickCountry')}</div></div>`;
 }
 function help() {
   return `<div class="screen">${topbar('help')}<div class="pad stack">
@@ -873,19 +1072,19 @@ function render() {
   document.body.classList.toggle('ar', S.lang === 'ar'); document.title = 'ExpatGuard';
   const app = document.getElementById('app'), tabs = document.getElementById('tabs');
   skyN = 0;
-  if (!S.onboarded) { app.classList.add('full'); app.innerHTML = { welcome, login, setup }[V.pre](); tabs.hidden = true; return; }
+  if (!S.onboarded) { app.classList.add('full'); app.innerHTML = { welcome, login, setup, country: countryStep }[V.pre](); tabs.hidden = true; return; }
   app.classList.remove('full'); tabs.hidden = false;
   app.innerHTML = V.screen ? SCREENS[V.screen]() : { home, flights, docs: documents, profile }[V.tab]();
-  tabs.innerHTML = `<div class="in">${[['home', 'home', 'tabHome'], ['flights', 'flight', 'tabFlights'], ['docs', 'doc', 'tabDocs'], ['profile', 'user', 'tabProfile']].map(([k, i, l]) => { const on = !V.screen && V.tab === k; return `<button class="tab ${on ? 'on' : ''}" data-a="tab" data-v="${k}" aria-current="${on ? 'page' : 'false'}">${ic(i)}<span>${t(l)}</span><span class="alt2" lang="${OL()}">${t2(l)}</span></button>`; }).join('')}</div>`;
+  tabs.innerHTML = `<div class="in">${[['home', 'home', 'tabHome'], ['flights', 'flight', 'tabFlights'], ['docs', 'doc', 'tabDocs'], ['profile', 'user', 'tabProfile']].map(([k, i, l]) => { const on = !V.screen && V.tab === k; return `<button class="tab ${on ? 'on' : ''}" data-a="tab" data-v="${k}" aria-current="${on ? 'page' : 'false'}">${ic(i)}<span>${t(l)}</span></button>`; }).join('')}</div>`;
 }
 function go(screen, p = {}) {
   V = { ...V, screen, p, err: [], confirm: false };
   if (screen === 'docForm') {
     const d = S.docs.find((x) => x.id === p.id);
-    V.form = d ? { ...d, country: docCountry(d), offsets: [...d.offsets] } : { id: null, type: 'qatar_id', name: t('types').qatar_id, country: S.country, expiry: '', offsets: [90, 30, 7, 1], notes: '' };
+    V.form = d ? { ...d, country: docCountry(d), offsets: [...d.offsets] } : { id: null, type: 'resid', name: typeName('resid'), country: S.country, expiry: '', offsets: [90, 30, 7, 1], notes: '' };
   }
   if (screen === 'newAlert') V.form = { origin: HOME_AIRPORT[S.country], dest: p.dest || '', trip: 'round', depart: '', ret: '', flex: 0, adults: 1, children: 0, cabin: 'economy', price: '', cur: CUR[S.country], direct: true, nb: true, nd: false };
-  if (screen === 'gratuity') V.form = { step: 0, country: S.country, start: '', end: '', wage: '', social: '', reason: 'termination', result: null };
+  if (screen === 'gratuity') V.form = { step: 1, country: S.country, start: '', end: '', wage: '', social: '', reason: 'termination', result: null };
   render(); window.scrollTo(0, 0);
 }
 function readAlertForm() {
@@ -895,9 +1094,10 @@ function readAlertForm() {
 }
 function readGratForm() {
   const g = V.form, v = (id) => document.getElementById(id)?.value ?? '';
-  Object.assign(g, { start: v('g-start'), end: v('g-end'), wage: v('g-wage'), social: v('g-social'), reason: v('g-reason') });
+  if (!document.getElementById('g-start')) return;
+  Object.assign(g, { start: v('g-start'), end: v('g-end'), wage: v('g-wage'), social: v('g-social') });
 }
-function readDocForm() { const d = V.form, v = (id) => document.getElementById(id).value; Object.assign(d, { type: v('d-type'), name: v('d-name'), country: v('d-country'), expiry: v('d-exp'), notes: v('d-notes') }); }
+function readDocForm() { const d = V.form, v = (id) => document.getElementById(id)?.value ?? ''; Object.assign(d, { name: v('d-name'), expiry: v('d-exp') }); }
 
 document.addEventListener('click', (e) => {
   const el = e.target.closest('[data-a]'); if (!el || el.disabled) return;
@@ -905,19 +1105,18 @@ document.addEventListener('click', (e) => {
   if (a === 'tab') { V = { ...V, tab: v, screen: null, p: {}, confirm: false }; render(); window.scrollTo(0, 0); }
   else if (a === 'go') go(v, { id: el.dataset.id });
   else if (a === 'back') {
-    if (V.screen === 'guide' && V.p.country) { V.p = {}; render(); }
-    else if (V.screen) { V.screen = null; V.confirm = false; render(); }
+    if (V.screen) { V.screen = null; V.confirm = false; render(); }
     else { V.tab = 'home'; V.p = {}; render(); }
     window.scrollTo(0, 0);
   }
   else if (a === 'pre') { if (V.pre === 'setup') S.name = document.getElementById('s-name')?.value.trim() ?? S.name; V.pre = v; V.loginMsg = false; render(); window.scrollTo(0, 0); }
   else if (a === 'soon') { V.loginMsg = true; render(); }
-  else if (a === 'setupCountry') { S.name = document.getElementById('s-name').value.trim(); S.country = v; persist(); render(); }
+  else if (a === 'setupCountry') { S.country = v; persist(); V.pre = 'setup'; render(); window.scrollTo(0, 0); }
   else if (a === 'finishSetup') { S.name = document.getElementById('s-name').value.trim(); S.home = document.getElementById('s-home').value || null; S.onboarded = true; V.tab = 'home'; V.screen = null; persist(); render(); window.scrollTo(0, 0); }
   else if (a === 'setLang') { if (V.pre === 'setup' && !S.onboarded) S.name = document.getElementById('s-name')?.value.trim() ?? S.name; S.lang = v; persist(); render(); }
   else if (a === 'toggleLang') { S.lang = S.lang === 'en' ? 'ar' : 'en'; persist(); render(); }
   else if (a === 'logout') { S.onboarded = false; V.pre = 'welcome'; persist(); render(); window.scrollTo(0, 0); }
-  else if (a === 'pickCountry') { S.country = v; persist(); V.screen = null; render(); toast(t('saved')); }
+  else if (a === 'pickCountry') { S.country = v; persist(); V.screen = null; V.tab = 'home'; render(); window.scrollTo(0, 0); toast(fill(t('nowShowing'), { c: cname(v) })); }
   else if (a === 'ftab') { V.p = { ftab: v }; render(); }
   else if (a === 'dc') { V.p = { dc: v }; render(); }
   else if (a === 'quickAlert') go('newAlert', { dest: v });
@@ -930,16 +1129,15 @@ document.addEventListener('click', (e) => {
   else if (a === 'resetAll') { S = { ...DEFAULT, lang: S.lang, country: S.country, name: S.name, onboarded: true }; persist(); V.confirm = false; render(); toast(t('resetDone')); }
   else if (a === 'trip') { readAlertForm(); V.form.trip = v; render(); }
   else if (a === 'count') { readAlertForm(); V.form.adults = Math.min(9, Math.max(1, V.form.adults + +v)); render(); }
-  else if (a === 'gCountry') { V.form.country = v; render(); }
-  else if (a === 'gStep') { if (V.form.step === 1) readGratForm(); V.form.step = +v; V.err = []; render(); window.scrollTo(0, 0); }
-  else if (a === 'guideCountry') { V.p = { country: v }; render(); }
+  else if (a === 'gReason') { readGratForm(); V.form.reason = v; render(); }
+  else if (a === 'docType') { readDocForm(); V.form.type = v; V.form.name = v === 'custom' ? '' : typeName(v, V.form.country); render(); }
+  else if (a === 'guideTick') { const i = +v; const cur = new Set(S.guide[S.country] || []); cur.has(i) ? cur.delete(i) : cur.add(i); S.guide[S.country] = [...cur].sort(); persist(); render(); }
+  else if (a === 'gStep') { readGratForm(); V.form.step = +v; V.err = []; render(); window.scrollTo(0, 0); }
 });
 document.addEventListener('change', (e) => {
   const el = e.target.closest('[data-c]'); if (!el) return;
   const c = el.dataset.c;
-  if (c === 'docType') { const nameEl = document.getElementById('d-name'); if (!nameEl.value || Object.values(t('types')).includes(nameEl.value)) nameEl.value = t('types')[el.value]; if (TYPE_COUNTRY[el.value]) document.getElementById('d-country').value = TYPE_COUNTRY[el.value]; }
-  else if (c === 'alertAp') { readAlertForm(); render(); }
-  else if (c === 'guideTick') { const c2 = V.p.country, i = +el.dataset.v; const cur = new Set(S.guide[c2] || []); el.checked ? cur.add(i) : cur.delete(i); S.guide[c2] = [...cur].sort(); persist(); render(); }
+  if (c === 'alertAp') { readAlertForm(); render(); }
 });
 document.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -947,7 +1145,7 @@ document.addEventListener('submit', (e) => {
   if (f === 'login') { V.loginMsg = true; render(); }
   if (f === 'savePersonal') { S.name = document.getElementById('p-name').value.trim(); S.email = document.getElementById('p-email').value.trim(); S.home = document.getElementById('p-home').value || null; persist(); V.screen = null; render(); toast(t('saved')); }
   if (f === 'saveDoc') {
-    readDocForm(); const d = V.form; d.name = d.name.trim(); d.notes = d.notes.trim();
+    readDocForm(); const d = V.form; if (d.type !== 'custom') d.name = typeName(d.type, d.country); d.name = d.name.trim(); d.notes = (d.notes || '').trim();
     V.err = []; if (!d.name) V.err.push(t('errName')); if (!/^\d{4}-\d{2}-\d{2}$/.test(d.expiry)) V.err.push(t('errExpiry'));
     if (V.err.length) return render();
     const rec = { id: d.id || uid(), type: d.type, name: d.name, country: d.country, expiry: d.expiry, offsets: d.offsets, notes: d.notes };
